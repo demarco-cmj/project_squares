@@ -1,6 +1,8 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - GunInfo
+    - Item
     - Launcher
     - Menu
     - MenuManager
@@ -10,8 +12,6 @@ ScriptsOnlyBuild:
     - PlayerManager
     - RoomListItem
     - RoomManager
-    PhotonUnityNetworking.Editor.dll:
-    - Photon.Pun.PunSceneSettings
     PhotonUnityNetworking.dll:
     - Photon.Pun.PhotonTransformView
     - Photon.Pun.PhotonView
@@ -167,6 +167,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 29600}
     - Class: 114
       Script: {instanceID: 31230}
+    - Class: 114
+      Script: {instanceID: 46068}
+    - Class: 114
+      Script: {instanceID: 46456}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1142,7 +1146,7 @@ ScriptsOnlyBuild:
     className: OLD_PlayerController
   - hash:
       serializedVersion: 2
-      Hash: fca987aedc8efbb974b6df169cabc91f
+      Hash: 67a862a0771f0a74f825c338b552d9e6
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -1152,6 +1156,24 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerGroundCheck
+  - hash:
+      serializedVersion: 2
+      Hash: 1a286079cf1647bc90669bb8cf035be6
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ItemInfo
+  - hash:
+      serializedVersion: 2
+      Hash: 1a286079cf1647bc90669bb8cf035be6
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: GunInfo
+  - hash:
+      serializedVersion: 2
+      Hash: 0cd7463b8a2421fc32dcc98809e90c09
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Item
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity
