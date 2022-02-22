@@ -1,53 +1,83 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerController : MonoBehaviour
-{   
+{
+    [SerializeField] float mouseSens, sprintSpeed, walkSpeed, jumpForce, smoothTime;
+    [SerializeField] GameObject camHolder;
 
-    //Basic Movement
-    public CharacterController controller;
-    public float speed = 12f;
-    public float jumpHeight = 3f;
 
-    //Gravity
-    Vector3 velocity;
+    float verticalLookRotation;
     bool isGrounded;
-    public float gravity = -9.81f;
+    Vector3 smoothMoveVelocity;
+    Vector3 moveAmount;
 
-    //Ground Check & Grav Reset
-    public Transform groundCheck;
-    public float groundDistance = 0.4f;
-    public LayerMask groundMask;
+    Rigidbody rb;
+    PhotonView PV;
 
-
-    // Update is called once per frame
-    void Update()
-    {   
-        //Ground Check
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if(isGrounded && velocity.y < 0){
-            velocity.y = 0f;
-        }
-
-
-        //PLayer Movement
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-        Vector3 move = (transform.right * x + transform.forward * z);
-        if(move.magnitude > 1){
-            move /= move.magnitude;
-        }
-        controller.Move(move * speed * Time.deltaTime);
-
-        //Jump
-        if(Input.GetButtonDown("Jump") && isGrounded){
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
-
-        //Gravity
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
-
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        PV = GetComponent<PhotonView>();
     }
+
+    void Start()
+    {
+        if(!PV.IsMine)
+        {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+            Destroy(rb); //Helps to smooth movement sync, Destroys RB of other players. NOTE: physics object bug in future?
+        }
+    }
+
+    void Update()
+    {
+        if(!PV.IsMine)
+            return;
+        
+        MouseLook();
+        Move();
+        Jump();
+    }
+
+    void MouseLook()
+    {
+        //Mouse Look transforms
+        transform.Rotate(Vector3.up * Input.GetAxisRaw("Mouse X") * mouseSens);
+        verticalLookRotation += Input.GetAxisRaw("Mouse Y") * mouseSens;
+        verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90f, 90f);
+
+        camHolder.transform.localEulerAngles = Vector3.left * verticalLookRotation;
+    }
+
+    void Move()
+    {
+        Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+
+        moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed), ref smoothMoveVelocity, smoothTime); //use sprint speed if holding shift, walk if not
+    }
+
+    void Jump()
+    {
+        if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.AddForce(transform.up * jumpForce);
+        }
+    }
+    
+    public void SetIsGrounded(bool grounded)
+    {
+        isGrounded = grounded;
+    }
+
+    void FixedUpdate()
+    {
+        if(!PV.IsMine)
+            return;
+        
+        rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
+    }
+
 }
