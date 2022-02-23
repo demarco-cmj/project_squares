@@ -2,7 +2,6 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - GunInfo
-    - Item
     - Launcher
     - Menu
     - MenuManager
@@ -12,6 +11,9 @@ ScriptsOnlyBuild:
     - PlayerManager
     - RoomListItem
     - RoomManager
+    - SemiAutoGun
+    PhotonUnityNetworking.Editor.dll:
+    - Photon.Pun.PunSceneSettings
     PhotonUnityNetworking.dll:
     - Photon.Pun.PhotonTransformView
     - Photon.Pun.PhotonView
@@ -170,7 +172,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 46068}
     - Class: 114
-      Script: {instanceID: 46456}
+      Script: {instanceID: 56332}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1164,16 +1166,16 @@ ScriptsOnlyBuild:
     className: ItemInfo
   - hash:
       serializedVersion: 2
-      Hash: 1a286079cf1647bc90669bb8cf035be6
+      Hash: 97ef6bf4e3bc4048120649a444e03eb5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GunInfo
   - hash:
       serializedVersion: 2
-      Hash: 0cd7463b8a2421fc32dcc98809e90c09
+      Hash: 6b0bc21c879ddafef0c8f84ad09ef98c
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: Item
+    className: SemiAutoGun
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

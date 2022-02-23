@@ -124,7 +124,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8502141645434502664}
-  - component: {fileID: 1316502071521431703}
+  - component: {fileID: 4418222743290333670}
   m_Layer: 0
   m_Name: Gun2Item
   m_TagString: Untagged
@@ -147,7 +147,7 @@ Transform:
   m_Father: {fileID: 2466481149595758201}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1316502071521431703
+--- !u!114 &4418222743290333670
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -156,11 +156,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2510729618935887946}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a111141bc0b9e44e85b09fdeac02703, type: 3}
+  m_Script: {fileID: 11500000, guid: 487566f125564ab4b92d3fd029062a83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 11400000, guid: 234f771d58405604b8149ab7a1d848cf, type: 2}
   itemObj: {fileID: 7416661953993129735}
+  cam: {fileID: 6596321949861292274}
 --- !u!1 &2988826746769479076
 GameObject:
   m_ObjectHideFlags: 0
@@ -572,8 +573,8 @@ MonoBehaviour:
   smoothTime: 0.15
   camHolder: {fileID: 4591327016189251793}
   items:
-  - {fileID: 2440359510065623191}
-  - {fileID: 1316502071521431703}
+  - {fileID: 6661742657887591093}
+  - {fileID: 4418222743290333670}
 --- !u!114 &2808825371136111156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -681,7 +682,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2149181352467829038}
-  - component: {fileID: 2440359510065623191}
+  - component: {fileID: 6661742657887591093}
   m_Layer: 0
   m_Name: Gun1Item
   m_TagString: Untagged
@@ -704,7 +705,7 @@ Transform:
   m_Father: {fileID: 2466481149595758201}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2440359510065623191
+--- !u!114 &6661742657887591093
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -713,11 +714,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6748734904007637870}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a111141bc0b9e44e85b09fdeac02703, type: 3}
+  m_Script: {fileID: 11500000, guid: 487566f125564ab4b92d3fd029062a83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 11400000, guid: 3e2de4da4ec010d46a3a67fd70040e8e, type: 2}
   itemObj: {fileID: 6402827709433259915}
+  cam: {fileID: 6596321949861292274}
 --- !u!1 &7416661953993129735
 GameObject:
   m_ObjectHideFlags: 0

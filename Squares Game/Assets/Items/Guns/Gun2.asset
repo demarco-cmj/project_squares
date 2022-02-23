@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Gun2
   m_EditorClassIdentifier: 
   itemName: Gun 2
+  damage: 10

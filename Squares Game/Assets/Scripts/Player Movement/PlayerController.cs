@@ -5,27 +5,38 @@ using Photon.Pun;
 using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class PlayerController : MonoBehaviourPunCallbacks
-{
+public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
+{   
+    //Fields
     [SerializeField] float mouseSens, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     [SerializeField] GameObject camHolder;
     [SerializeField] Item[] items;
 
+    //In-Hand Items
     int itemIndex;
     int prevItemIndex = -1;
 
+    //Movement
     float verticalLookRotation;
     bool isGrounded;
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;
 
+    //Client Sync
     Rigidbody rb;
     PhotonView PV;
+
+    //Health
+    const float maxHealth = 100f;
+    float currentHealth = maxHealth;
+    PlayerManager playerManager;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         PV = GetComponent<PhotonView>();
+
+        playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
     }
 
     void Start()
@@ -83,7 +94,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 EquipItem(itemIndex - 1);
             }
+        }
 
+        //Using items in hand
+        if(Input.GetMouseButtonDown(0))
+        {
+            items[itemIndex].Use();
         }
     }
 
@@ -160,4 +176,32 @@ public class PlayerController : MonoBehaviourPunCallbacks
 			EquipItem((int)changedProps["itemIndex"]);
 		}
 	}
+
+    /************************* DAMAGE *************************/
+
+    public void TakeDamage(float damage)
+    {
+        //Debug.Log("Dealt: " + damage);
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+    }
+
+    [PunRPC] //Finds correct target within PUN
+    void RPC_TakeDamage(float damage)
+    {
+        if(!PV.IsMine)
+            return;
+
+        //Debug.Log("Took: " + damage);
+
+        currentHealth -= damage;
+        if(currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        playerManager.Die();
+    }
 }
