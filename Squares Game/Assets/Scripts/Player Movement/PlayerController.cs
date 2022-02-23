@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 {   
@@ -11,6 +12,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] float mouseSens, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     [SerializeField] GameObject camHolder;
     [SerializeField] Item[] items;
+
+
 
     //In-Hand Items
     int itemIndex;
@@ -30,6 +33,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     const float maxHealth = 100f;
     float currentHealth = maxHealth;
     PlayerManager playerManager;
+    [SerializeField] Image healthbarImg;
+    [SerializeField] GameObject ui;
 
     void Awake()
     {
@@ -49,58 +54,22 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb); //Helps to smooth movement sync, Destroys RB of other players. NOTE: physics object bug in future?
+            Destroy(ui);
         }
     }
 
     void Update()
     {
+        //Only Update for your own client's info
         if(!PV.IsMine)
             return;
         
         MouseLook();
         Move();
         Jump();
-
-
-        //Gun Item Swapping
-        for(int i = 0; i < items.Length; i++)
-        {
-            if(Input.GetKeyDown((i + 1).ToString()))
-            {
-                EquipItem(i);
-                break;
-            }
-        }
-        
-        if(Input.GetAxisRaw("Mouse ScrollWheel") > 0f)
-        {
-            if(itemIndex >= items.Length - 1)
-            {
-                EquipItem(0);
-            }
-            else
-            {
-                EquipItem(itemIndex + 1);
-            }
-
-        }
-        else if(Input.GetAxisRaw("Mouse ScrollWheel") < 0f)
-        {
-            if(itemIndex <= 0)
-            {
-                EquipItem(items.Length - 1);
-            }
-            else
-            {
-                EquipItem(itemIndex - 1);
-            }
-        }
-
-        //Using items in hand
-        if(Input.GetMouseButtonDown(0))
-        {
-            items[itemIndex].Use();
-        }
+        UpdateItem();
+        CheckInBounds();
+        UseItem();
     }
 
 
@@ -127,6 +96,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(transform.up * jumpForce);
+        }
+    }
+
+    void CheckInBounds()
+    {
+        //Fall out of world
+        if(transform.position.y < -10f)
+        {
+            Die();
         }
     }
     
@@ -177,6 +155,53 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 		}
 	}
 
+    void UpdateItem()
+    {
+         //Gun Item Swapping
+        for(int i = 0; i < items.Length; i++)
+        {
+            if(Input.GetKeyDown((i + 1).ToString()))
+            {
+                EquipItem(i);
+                break;
+            }
+        }
+        
+        if(Input.GetAxisRaw("Mouse ScrollWheel") > 0f)
+        {
+            if(itemIndex >= items.Length - 1)
+            {
+                EquipItem(0);
+            }
+            else
+            {
+                EquipItem(itemIndex + 1);
+            }
+
+        }
+        else if(Input.GetAxisRaw("Mouse ScrollWheel") < 0f)
+        {
+            if(itemIndex <= 0)
+            {
+                EquipItem(items.Length - 1);
+            }
+            else
+            {
+                EquipItem(itemIndex - 1);
+            }
+        }
+
+    }
+
+    void UseItem()
+    {
+        //Using items in hand
+        if(Input.GetMouseButtonDown(0))
+        {
+            items[itemIndex].Use();
+        }
+    }
+
     /************************* DAMAGE *************************/
 
     public void TakeDamage(float damage)
@@ -194,6 +219,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         //Debug.Log("Took: " + damage);
 
         currentHealth -= damage;
+
+        healthbarImg.fillAmount = currentHealth / maxHealth; //Modify health bar as a percentage
+
         if(currentHealth <= 0)
         {
             Die();

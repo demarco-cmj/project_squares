@@ -12,6 +12,7 @@
 -a="C:\Unity Projects\project_squares\Squares Game\Library\PlayerScriptAssemblies\PhotonUnityNetworking.dll"
 -a="C:\Unity Projects\project_squares\Squares Game\Library\PlayerScriptAssemblies\Unity.ProBuilder.KdTree.dll"
 -a="C:\Unity Projects\project_squares\Squares Game\Library\PlayerScriptAssemblies\Unity.ProBuilder.Stl.dll"
+-a="C:\Unity Projects\project_squares\Squares Game\Library\PlayerScriptAssemblies\Unity.Postprocessing.Runtime.dll"
 -a="C:\Unity Projects\project_squares\Squares Game\Library\PackageCache\com.unity.nuget.newtonsoft-json@2.0.0\Runtime\AOT\Newtonsoft.Json.dll"
 -a="C:\Unity Projects\project_squares\Squares Game\Assets\Photon\PhotonLibs\Photon3Unity3D.dll"
 -a="C:\Unity Projects\project_squares\Squares Game\Assets\Photon\PhotonLibs\WebSocket\websocket-sharp.dll"
