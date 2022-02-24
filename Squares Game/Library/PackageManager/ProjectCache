@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637811881342186527
-    m_Hash: 1129564408
+      ticks: 637812737549180110
+    m_Hash: 2739283737
   m_LockFileStatus:
     m_FilePath: C:/Unity Projects/project_squares/Squares Game/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637811881342261855
-    m_Hash: 2751682134
+      ticks: 637812737549189994
+    m_Hash: 734783789
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_PackageAssets:
