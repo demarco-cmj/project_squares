@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] float mouseSens, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     [SerializeField] GameObject camHolder;
     [SerializeField] Item[] items;
+    bool isPaused = false;
 
 
 
@@ -29,12 +30,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     Rigidbody rb;
     PhotonView PV;
 
-    //Health
+    //Health & UI
     const float maxHealth = 100f;
     float currentHealth = maxHealth;
     PlayerManager playerManager;
     [SerializeField] Image healthbarImg;
     [SerializeField] GameObject ui;
+    [SerializeField] Image topHPBar;
+    [SerializeField] PhotonView worldUI;
+    [SerializeField] GameObject pauseMenu;
 
     void Awake()
     {
@@ -49,12 +53,18 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(PV.IsMine)
         {
             EquipItem(0);
+            Cursor.lockState = CursorLockMode.Locked;
         }
         else
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb); //Helps to smooth movement sync, Destroys RB of other players. NOTE: physics object bug in future?
             Destroy(ui);
+            
+            if(worldUI.IsMine) //Hide own username
+            {
+                gameObject.SetActive(false);
+            }
         }
     }
 
@@ -64,12 +74,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(!PV.IsMine)
             return;
         
-        MouseLook();
-        Move();
-        Jump();
-        UpdateItem();
+        if(!isPaused)
+        {
+            MouseLook();
+            Move();
+            Jump();
+            UpdateItem();
+            UseItem();
+        }
         CheckInBounds();
-        UseItem();
+        Pause();
     }
 
 
@@ -96,6 +110,24 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(transform.up * jumpForce);
+        }
+    }
+
+    void Pause()
+    {
+        if(Input.GetKeyDown("escape") && !isPaused)   //pause game
+        {
+            Cursor.lockState = CursorLockMode.None;
+            isPaused = true;
+            pauseMenu.SetActive(true);
+            //Debug.Log("paused");
+        }
+        else if(Input.GetKeyDown("escape") && isPaused) //unpause
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            isPaused = false;
+            pauseMenu.SetActive(false);
+            //Debug.Log("unpaused");
         }
     }
 
@@ -210,7 +242,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
     }
 
-    [PunRPC] //Finds correct target within PUN
+    [PunRPC] //Finds correct target within PUN //RPC == Remote Procedure Call
     void RPC_TakeDamage(float damage)
     {
         if(!PV.IsMine)
@@ -221,6 +253,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         currentHealth -= damage;
 
         healthbarImg.fillAmount = currentHealth / maxHealth; //Modify health bar as a percentage
+        topHPBar.fillAmount = currentHealth / maxHealth;
 
         if(currentHealth <= 0)
         {
