@@ -12,9 +12,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] float mouseSens, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     [SerializeField] GameObject camHolder;
     [SerializeField] Item[] items;
-    bool isPaused = false;
-
-
 
     //In-Hand Items
     int itemIndex;
@@ -38,7 +35,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] GameObject ui;
     [SerializeField] Image topHPBar;
     [SerializeField] PhotonView worldUI;
-    [SerializeField] GameObject pauseMenu;
+    //[SerializeField] GameObject pauseMenu;
+    bool isPaused = false;
 
     void Awake()
     {
@@ -53,7 +51,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(PV.IsMine)
         {
             EquipItem(0);
-            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.lockState = CursorLockMode.Locked; //Lock cursor to middle of screen on launch
         }
         else
         {
@@ -82,8 +80,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             UpdateItem();
             UseItem();
         }
-        CheckInBounds();
+
         Pause();
+        CheckInBounds();
+
     }
 
 
@@ -110,24 +110,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(transform.up * jumpForce);
-        }
-    }
-
-    void Pause()
-    {
-        if(Input.GetKeyDown("escape") && !isPaused)   //pause game
-        {
-            Cursor.lockState = CursorLockMode.None;
-            isPaused = true;
-            pauseMenu.SetActive(true);
-            //Debug.Log("paused");
-        }
-        else if(Input.GetKeyDown("escape") && isPaused) //unpause
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            isPaused = false;
-            pauseMenu.SetActive(false);
-            //Debug.Log("unpaused");
         }
     }
 
@@ -265,4 +247,24 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     {
         playerManager.Die();
     }
+
+    /************************* MENUS *************************/
+
+    void Pause()
+    {
+        if(Input.GetKeyDown("escape"))
+        {
+            isPaused = !isPaused;
+            //Cursor.lockState = (isPaused) ? CursorLockMode.Confined : CursorLockMode.Locked;
+            //pauseMenu.SetActive(isPaused);
+        }
+    }
+
+    // void MouseClick()
+    // {
+    //     if(Input.GetMouseButtonDown(0))
+    //     {
+    //         Debug.Log("test");
+    //     }
+    // }
 }
