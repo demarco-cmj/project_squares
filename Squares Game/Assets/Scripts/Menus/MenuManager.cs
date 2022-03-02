@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class MenuManager : MonoBehaviour
 {
@@ -42,5 +43,21 @@ public class MenuManager : MonoBehaviour
     public void CloseMenu(Menu menu)
     {
         menu.Close();
-    } 
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("Disconnecting...");
+        PhotonNetwork.Disconnect();
+        Debug.Log("Closing...");
+        Application.Quit();
+    }
+
+    public void LeaveToMenu()
+    {
+        //PhotonNetwork.LeaveRoom();
+        //SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        //MenuManager.inst.OpenMenu("loading");
+        Debug.Log("Clicked Left Room!");
+    }
 }

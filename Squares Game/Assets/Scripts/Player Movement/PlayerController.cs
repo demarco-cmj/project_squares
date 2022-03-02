@@ -11,11 +11,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     //Fields
     [SerializeField] float mouseSens, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     [SerializeField] GameObject camHolder;
-    [SerializeField] Item[] items;
-
-
+    
 
     //In-Hand Items
+    [SerializeField] Item[] items;
     int itemIndex;
     int prevItemIndex = -1;
 
@@ -29,12 +28,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     Rigidbody rb;
     PhotonView PV;
 
-    //Health
+    //Health & UI
     const float maxHealth = 100f;
     float currentHealth = maxHealth;
     PlayerManager playerManager;
     [SerializeField] Image healthbarImg;
     [SerializeField] GameObject ui;
+    [SerializeField] Image topHPBar;
+    [SerializeField] PhotonView worldUI;
+    //[SerializeField] GameObject pauseMenu;
+    bool isPaused = false;
 
     void Awake()
     {
@@ -49,12 +52,18 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(PV.IsMine)
         {
             EquipItem(0);
+            Cursor.lockState = CursorLockMode.Locked; //Lock cursor to middle of screen on launch
         }
         else
         {
             Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb); //Helps to smooth movement sync, Destroys RB of other players. NOTE: physics object bug in future?
             Destroy(ui);
+            
+            if(worldUI.IsMine) //Hide own username
+            {
+                gameObject.SetActive(false);
+            }
         }
     }
 
@@ -64,12 +73,18 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(!PV.IsMine)
             return;
         
-        MouseLook();
-        Move();
-        Jump();
-        UpdateItem();
+        if(!isPaused)
+        {
+            MouseLook();
+            Move();
+            Jump();
+            UpdateItem();
+            UseItem();
+        }
+
+        Pause();
         CheckInBounds();
-        UseItem();
+
     }
 
 
@@ -210,7 +225,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
     }
 
-    [PunRPC] //Finds correct target within PUN
+    [PunRPC] //Finds correct target within PUN //RPC == Remote Procedure Call
     void RPC_TakeDamage(float damage)
     {
         if(!PV.IsMine)
@@ -221,6 +236,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         currentHealth -= damage;
 
         healthbarImg.fillAmount = currentHealth / maxHealth; //Modify health bar as a percentage
+        topHPBar.fillAmount = currentHealth / maxHealth;
 
         if(currentHealth <= 0)
         {
@@ -232,4 +248,24 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     {
         playerManager.Die();
     }
+
+    /************************* MENUS *************************/
+
+    void Pause()
+    {
+        if(Input.GetKeyDown("escape"))
+        {
+            isPaused = !isPaused;
+            //Cursor.lockState = (isPaused) ? CursorLockMode.Confined : CursorLockMode.Locked;
+            //pauseMenu.SetActive(isPaused);
+        }
+    }
+
+    // void MouseClick()
+    // {
+    //     if(Input.GetMouseButtonDown(0))
+    //     {
+    //         Debug.Log("test");
+    //     }
+    // }
 }
