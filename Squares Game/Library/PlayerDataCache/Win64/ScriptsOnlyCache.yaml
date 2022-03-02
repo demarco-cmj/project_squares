@@ -97,6 +97,10 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 2648}
     - Class: 114
+      Script: {instanceID: 2964}
+    - Class: 114
+      Script: {instanceID: 3478}
+    - Class: 114
       Script: {instanceID: 4204}
     - Class: 114
       Script: {instanceID: 4868}
@@ -1376,6 +1380,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Postprocessing.Runtime.dll
     namespaceName: UnityEngine.Rendering.PostProcessing
     className: AmbientOcclusion
+  - hash:
+      serializedVersion: 2
+      Hash: 3c7e24863f5de69f7825392085c634e2
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: FullAutoGun
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

@@ -11,9 +11,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     //Fields
     [SerializeField] float mouseSens, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     [SerializeField] GameObject camHolder;
-    [SerializeField] Item[] items;
+    
 
     //In-Hand Items
+    [SerializeField] Item[] items;
     int itemIndex;
     int prevItemIndex = -1;
 
