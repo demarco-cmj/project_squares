@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 {   
+    /************************* LOCAL VARIABLES *************************/
+    
     //Fields
     [SerializeField] float mouseSens, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     [SerializeField] GameObject camHolder;
@@ -36,8 +38,21 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] GameObject ui;
     [SerializeField] Image topHPBar;
     [SerializeField] PhotonView worldUI;
-    //[SerializeField] GameObject pauseMenu;
     bool isPaused = false;
+
+    /************************* MODIFIABLE STATS *************************/
+    
+    //Weapons
+    float damageMod, recoilMod, fireRateMod, bulletVelocityMod, cooldownSpeedMod, reloadTimeMod;
+    int magazineSizeMod, bulletsPerTapMod, bulletBounces;
+
+    //Player Movement
+    float moveSpeedMod, jumpForceMod;
+
+    //Player Other
+    float healthMod;
+
+    /************************* SCRIPT CORE FUNCTION *************************/
 
     void Awake()
     {
@@ -79,7 +94,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             Move();
             Jump();
             UpdateItem();
-            UseItem();
+            UseItem(); //where gun stats need to be fed
         }
 
         Pause();
