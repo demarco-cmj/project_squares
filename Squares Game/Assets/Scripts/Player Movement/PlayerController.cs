@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         isGrounded = grounded;
     }
 
-    void FixedUpdate()
+    void FixedUpdate()      //TODO: Smooth player movement between FixedUpdate
     {
         if(!PV.IsMine)
             return;

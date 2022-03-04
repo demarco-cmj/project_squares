@@ -201,7 +201,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7486173286037868897}
-  - component: {fileID: 8605294868379474898}
   - component: {fileID: 8871401522715548751}
   - component: {fileID: 4869974017972441122}
   m_Layer: 0
@@ -226,22 +225,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8605294868379474898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2560927815820828151}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 487566f125564ab4b92d3fd029062a83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemInfo: {fileID: 11400000, guid: 3e2de4da4ec010d46a3a67fd70040e8e, type: 2}
-  itemObj: {fileID: 554810758793184103}
-  bulletImpactPrefab: {fileID: 8023780245390676839, guid: 06076d1eaa9c300438e0c630e799fd3c, type: 3}
-  cam: {fileID: 0}
 --- !u!114 &8871401522715548751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,10 +260,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInfo: {fileID: 11400000, guid: 9232fd53f070fd840a9d7978cf7d9454, type: 2}
-  itemObj: {fileID: 0}
-  bulletImpactPrefab: {fileID: 0}
+  itemObj: {fileID: 2709271505765858887}
+  bulletImpactPrefab: {fileID: 8023780245390676839, guid: 06076d1eaa9c300438e0c630e799fd3c, type: 3}
   cam: {fileID: 0}
-  muzzle: {fileID: 0}
+  tempProjectile: {fileID: 3368005620101185373, guid: a98f66bbd100a514397b482468fae5e6, type: 3}
+  muzzle: {fileID: 7094280042027805279}
 --- !u!1 &2709271505765858887
 GameObject:
   m_ObjectHideFlags: 0

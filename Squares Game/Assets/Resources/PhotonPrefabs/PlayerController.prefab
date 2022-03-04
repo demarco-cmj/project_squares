@@ -2854,6 +2854,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8555746315854855380}
     - target: {fileID: 4869974017972441122, guid: ad0ddac69daf27047950f3c26319094d, type: 3}
+      propertyPath: tempProjectile
+      value: 
+      objectReference: {fileID: 3368005620101185373, guid: a98f66bbd100a514397b482468fae5e6, type: 3}
+    - target: {fileID: 4869974017972441122, guid: ad0ddac69daf27047950f3c26319094d, type: 3}
       propertyPath: bulletImpactPrefab
       value: 
       objectReference: {fileID: 8023780245390676839, guid: 06076d1eaa9c300438e0c630e799fd3c, type: 3}

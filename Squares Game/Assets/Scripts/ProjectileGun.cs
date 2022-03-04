@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 public class ProjectileGun : Gun
 {
@@ -9,6 +10,7 @@ public class ProjectileGun : Gun
     PhotonView PV;
 
     GunInfo gunInfo;
+    public GameObject tempProjectile;
     bool readyToShoot, shooting, reloading;
     public Transform muzzle;
 
@@ -38,6 +40,8 @@ public class ProjectileGun : Gun
         //     shooting = Input.GetKeyDown(KeyCode.Mouse0);
         // }
 
+        Debug.Log("SHOOTING PROJECTILE");
+
 
         //Check center of screen w/ ray for hit
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
@@ -59,13 +63,14 @@ public class ProjectileGun : Gun
         Vector3 direction = targetPoint - muzzle.position;
 
         //Instantiate bullet/projectile
-        GameObject currentBullet = Instantiate(gunInfo.projectile, muzzle.position, Quaternion.identity); //store instantiated bullet in currentBullet
+        // GameObject currentBullet = Instantiate(gunInfo.projectile, muzzle.position, Quaternion.identity); //store instantiated bullet in currentBullet
+        GameObject currentBullet = Instantiate(((GunInfo)itemInfo).projectile, muzzle.position, Quaternion.identity); //store instantiated bullet in currentBullet
         //Rotate bullet to shoot direction
         currentBullet.transform.forward = direction.normalized;
 
         //Add forces to bullet
-        currentBullet.GetComponent<Rigidbody>().AddForce(direction.normalized * gunInfo.bulletVelocity, ForceMode.Impulse);
-        currentBullet.GetComponent<Rigidbody>().AddForce(cam.transform.up * gunInfo.recoil, ForceMode.Impulse);
+        currentBullet.GetComponent<Rigidbody>().AddForce(direction.normalized * ((GunInfo)itemInfo).bulletVelocity, ForceMode.Impulse);
+        //currentBullet.GetComponent<Rigidbody>().AddForce(cam.transform.up * ((GunInfo)itemInfo).recoil, ForceMode.Impulse); //adds upward force to bullets
 
 
     }
