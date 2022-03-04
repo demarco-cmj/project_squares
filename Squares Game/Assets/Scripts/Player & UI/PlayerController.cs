@@ -88,6 +88,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(!PV.IsMine)
             return;
         
+        //TODO get isAutomatic from current gun to dictate input, modify with player inputs
+        // if(items[itemIndex].GetComponent<ProjectileGun>().gunInfo.isAutomatic)
+        // {
+        //     Debug.Log("wow it works");
+        // }
         if(!isPaused)
         {
             MouseLook();
