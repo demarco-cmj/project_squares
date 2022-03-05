@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             return;
         
         //TODO get isAutomatic from current gun to dictate input, modify with player inputs
-        // if(items[itemIndex].GetComponent<ProjectileGun>().gunInfo.isAutomatic)
+        // if(items[itemIndex].GetComponent<ProjectileGun>().isAutomatic)
         // {
         //     Debug.Log("wow it works");
         // }
@@ -231,8 +231,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     void UseItem()
     {
         //Using items in hand
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButton(0))  //now sends over at rapid fire
         {
+            //Debug.Log("Holding M1");
             items[itemIndex].Use();
         }
     }

@@ -9,4 +9,9 @@ public class GunInfo : ItemInfo
     public int magazineSize, bulletsPerTap;
     public bool isAutomatic;
     public GameObject projectile;
+
+    // GameObject shootBullet(float)
+    // {
+    //     GameObject currentBullet = Instantiate(((GunInfo)itemInfo).projectile, muzzle.position, Quaternion.identity);
+    // }
 }

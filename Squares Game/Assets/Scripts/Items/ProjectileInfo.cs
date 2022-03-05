@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "FPS/New Projectile")]
-public class ProjectileInfo : ItemInfo
+//[CreateAssetMenu(menuName = "FPS/New Projectile")]
+public class ProjectileInfo : MonoBehaviour
 {
-    float damage, velocity;
-    int bouncesLeft;
+    public float damage, velocity;
+    public int bouncesLeft;
 }
