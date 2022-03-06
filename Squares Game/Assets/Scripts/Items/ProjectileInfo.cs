@@ -5,7 +5,7 @@ using UnityEngine;
 //[CreateAssetMenu(menuName = "FPS/New Projectile")]
 public class ProjectileInfo : MonoBehaviour
 {
-    public float damage, velocity;
+    public float damage;
     public int bouncesLeft;
 
     void OnCollisionEnter(Collision collision)
@@ -13,6 +13,8 @@ public class ProjectileInfo : MonoBehaviour
         if(collision.gameObject.tag == "Player")
         {
             //deal damage to player, despawn proj
+            collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
+            //Destroy();
         }
         else
         {

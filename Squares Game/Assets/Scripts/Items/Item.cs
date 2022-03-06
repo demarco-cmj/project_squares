@@ -7,5 +7,5 @@ public abstract class Item : MonoBehaviour
     public ItemInfo itemInfo;
     public GameObject itemObj;
 
-    public abstract void Use();
+    public abstract void Use(Vector3 tp);
 }

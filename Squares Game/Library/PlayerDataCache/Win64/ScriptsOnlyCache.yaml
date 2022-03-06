@@ -666,7 +666,7 @@ ScriptsOnlyBuild:
     className: SupportLogger
   - hash:
       serializedVersion: 2
-      Hash: 7ed7322d46d4fc2b14894b893f8856b3
+      Hash: a802fccd4013b67dcea2e140c9c07e9f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ProjectileInfo
@@ -792,7 +792,7 @@ ScriptsOnlyBuild:
     className: TMP_FrameRateCounter
   - hash:
       serializedVersion: 2
-      Hash: ceb9cf1837dbfe2629d6d226c84b25ef
+      Hash: 5de4c9e0e0cc89f5ea7b953192157ab5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -1396,12 +1396,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Postprocessing.Runtime.dll
     namespaceName: UnityEngine.Rendering.PostProcessing
     className: AmbientOcclusion
-  - hash:
-      serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: ProjectileManager
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity
