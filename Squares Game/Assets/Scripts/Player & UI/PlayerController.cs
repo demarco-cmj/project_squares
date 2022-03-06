@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         }
         else
         {
-            Destroy(GetComponentInChildren<Camera>().gameObject);
+            //Destroy(GetComponentInChildren<Camera>().gameObject);
             Destroy(rb); //Helps to smooth movement sync, Destroys RB of other players. NOTE: physics object bug in future?
             Destroy(ui);
             
@@ -277,16 +277,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(Input.GetKeyDown("escape"))
         {
             isPaused = !isPaused;
-            //Cursor.lockState = (isPaused) ? CursorLockMode.Confined : CursorLockMode.Locked;
-            //pauseMenu.SetActive(isPaused);
         }
     }
-
-    // void MouseClick()
-    // {
-    //     if(Input.GetMouseButtonDown(0))
-    //     {
-    //         Debug.Log("test");
-    //     }
-    // }
 }

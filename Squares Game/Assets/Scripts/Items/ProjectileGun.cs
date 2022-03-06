@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon;
 using TMPro;
 
 public class ProjectileGun : Gun
@@ -16,7 +17,7 @@ public class ProjectileGun : Gun
     void Awake()
     {
         PV = GetComponent<PhotonView>();
-        readyToShoot = true;
+        
     }
 
     public override void Use()
@@ -37,6 +38,12 @@ public class ProjectileGun : Gun
     }
 
     void Shoot()
+    {
+        PV.RPC("RPC_Shoot", RpcTarget.All);
+    }
+
+    [PunRPC]
+    void RPC_Shoot()
     {
         //Debug.Log("SHOOTING PROJECTILE");
 
@@ -59,30 +66,29 @@ public class ProjectileGun : Gun
         //Create basic V3 trajectory
         Vector3 direction = targetPoint - muzzle.position;
 
-        //Instantiate bullet/projectile
+        //Instantiate bullet/projectile then Rotate bullet to shoot direction
         GameObject currentBullet = Instantiate(((GunInfo)itemInfo).projectile, muzzle.position, Quaternion.identity); //store instantiated bullet in currentBullet
-        //currentBullet.GetComponent<>
-        //Rotate bullet to shoot direction
         currentBullet.transform.forward = direction.normalized;
 
         //Add forces to bullet
         currentBullet.GetComponent<Rigidbody>().AddForce(direction.normalized * ((GunInfo)itemInfo).bulletVelocity, ForceMode.Impulse);
         //currentBullet.GetComponent<Rigidbody>().AddForce(cam.transform.up * ((GunInfo)itemInfo).recoil, ForceMode.Impulse); //adds upward force to bullets
 
+        //Destroy bullet after time
+        Destroy(currentBullet, 20f);
 
     }
 
-    [PunRPC]
-    void RPC_Shoot(Vector3 hitPosition, Vector3 hitNormal)
-    {
-        //Debug.Log(hitPosition);
-        Collider[] colliders = Physics.OverlapSphere(hitPosition, 0.3f);
-        if(colliders.Length != 0)
-        {
-            GameObject bulletImpactObj = Instantiate(bulletImpactPrefab, hitPosition + hitNormal * 0.001f, Quaternion.LookRotation(hitNormal, Vector3.up) * bulletImpactPrefab.transform.rotation);
-            Destroy(bulletImpactObj, 10f);
-            bulletImpactObj.transform.SetParent(colliders[0].transform);
-        }
-        
-    }
+    // [PunRPC]
+    // void RPC_Shoot(Vector3 hitPosition, Vector3 hitNormal)
+    // {
+    //     //Debug.Log(hitPosition);
+    //     Collider[] colliders = Physics.OverlapSphere(hitPosition, 0.3f);
+    //     if(colliders.Length != 0)
+    //     {
+    //         GameObject bulletImpactObj = Instantiate(bulletImpactPrefab, hitPosition + hitNormal * 0.001f, Quaternion.LookRotation(hitNormal, Vector3.up) * bulletImpactPrefab.transform.rotation);
+    //         Destroy(bulletImpactObj, 10f);
+    //         bulletImpactObj.transform.SetParent(colliders[0].transform);
+    //     }
+    // }
 }

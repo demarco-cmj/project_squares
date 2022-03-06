@@ -522,7 +522,7 @@ ScriptsOnlyBuild:
     className: CanvasScaler
   - hash:
       serializedVersion: 2
-      Hash: 02b632522d38652dc47ae59e7f457bb8
+      Hash: 492c4901f61856c8e3d6bc08f0b70624
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ProjectileGun
@@ -1396,6 +1396,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Postprocessing.Runtime.dll
     namespaceName: UnityEngine.Rendering.PostProcessing
     className: AmbientOcclusion
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ProjectileManager
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity
