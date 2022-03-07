@@ -15,10 +15,10 @@ MonoBehaviour:
   itemName: Phys2
   damage: 10
   recoil: 15
-  fireRate: 35
+  fireRate: 600
   cooldownSpeed: 5
   reloadTime: 4
-  bulletVelocity: 25
+  bulletVelocity: 50
   magazineSize: 20
   bulletsPerTap: 1
   isAutomatic: 1

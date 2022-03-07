@@ -11,34 +11,42 @@ public class ProjectileGun : Gun
     PhotonView PV;
 
     public GameObject tempProjectile;
-    bool shooting, reloading;
+    bool reloading;
     public Transform muzzle;
+    float timeBetweenShots, lastShot;
 
     void Awake()
     {
         PV = GetComponent<PhotonView>();
+        timeBetweenShots = 60 / ((GunInfo)itemInfo).fireRate; //Measured in rounds/min
+        lastShot = -1f;
         
     }
 
     public override void Use(Vector3 tp)
     {
-        //Debug.Log("Using: " + itemInfo.itemName);
+        if(Time.time >= lastShot + timeBetweenShots)
+        {
+            //Debug.Log("Using: " + itemInfo.itemName);
 
-        //shoot according to fire mode
-        if (((GunInfo)itemInfo).isAutomatic)
-        {
-            //Debug.Log("Is automatic");
-            Shoot(tp);
-        }
-        else if (Input.GetMouseButtonDown(0))
-        {
-            //Debug.Log("Isnt automatic");
-            Shoot(tp);
+            //shoot according to fire mode
+            if (((GunInfo)itemInfo).isAutomatic)
+            {
+                //Debug.Log("Is automatic");                 
+                Shoot(tp);
+                
+            }
+            else if (Input.GetMouseButtonDown(0))
+            {
+                //Debug.Log("Isnt automatic");
+                Shoot(tp);
+            }
         }
     }
 
     void Shoot(Vector3 tp)
     {
+        lastShot = Time.time;
         PV.RPC("RPC_Shoot", RpcTarget.All, tp);
     }
 
