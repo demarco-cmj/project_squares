@@ -12,6 +12,8 @@ ScriptsOnlyBuild:
     - PlayerListItem
     - PlayerManager
     - PlayerNameManager
+    - ProjectileGun
+    - ProjectileInfo
     - RoomListItem
     - RoomManager
     - SemiAutoGun
@@ -95,25 +97,25 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 2648}
+      Script: {instanceID: 2652}
     - Class: 114
-      Script: {instanceID: 2964}
+      Script: {instanceID: 2970}
     - Class: 114
-      Script: {instanceID: 3478}
+      Script: {instanceID: 3484}
     - Class: 114
-      Script: {instanceID: 4204}
+      Script: {instanceID: 4210}
     - Class: 114
-      Script: {instanceID: 4868}
+      Script: {instanceID: 4874}
     - Class: 114
-      Script: {instanceID: 5296}
+      Script: {instanceID: 5300}
     - Class: 114
-      Script: {instanceID: 5798}
+      Script: {instanceID: 5802}
     - Class: 114
-      Script: {instanceID: 5844}
+      Script: {instanceID: 5848}
     - Class: 114
-      Script: {instanceID: 6004}
+      Script: {instanceID: 6008}
     - Class: 114
-      Script: {instanceID: 6046}
+      Script: {instanceID: 6050}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -162,86 +164,94 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1582}
     - Class: 114
-      Script: {instanceID: 1694}
+      Script: {instanceID: 1696}
     - Class: 114
-      Script: {instanceID: 1808}
+      Script: {instanceID: 1810}
     - Class: 114
-      Script: {instanceID: 1978}
+      Script: {instanceID: 1980}
     - Class: 114
-      Script: {instanceID: 2378}
+      Script: {instanceID: 2382}
     - Class: 114
-      Script: {instanceID: 2484}
+      Script: {instanceID: 2488}
     - Class: 114
-      Script: {instanceID: 2506}
+      Script: {instanceID: 2510}
     - Class: 114
-      Script: {instanceID: 2576}
+      Script: {instanceID: 2580}
     - Class: 114
-      Script: {instanceID: 2648}
+      Script: {instanceID: 2652}
     - Class: 114
-      Script: {instanceID: 2730}
+      Script: {instanceID: 2734}
     - Class: 114
-      Script: {instanceID: 2766}
+      Script: {instanceID: 2770}
     - Class: 114
-      Script: {instanceID: 2816}
+      Script: {instanceID: 2820}
     - Class: 114
-      Script: {instanceID: 2964}
+      Script: {instanceID: 2838}
     - Class: 114
-      Script: {instanceID: 3016}
+      Script: {instanceID: 2970}
     - Class: 114
-      Script: {instanceID: 3132}
+      Script: {instanceID: 3022}
     - Class: 114
-      Script: {instanceID: 3204}
+      Script: {instanceID: 3138}
     - Class: 114
-      Script: {instanceID: 3464}
+      Script: {instanceID: 3210}
+    - Class: 114
+      Script: {instanceID: 3304}
     - Class: 114
       Script: {instanceID: 3470}
     - Class: 114
-      Script: {instanceID: 3478}
+      Script: {instanceID: 3476}
     - Class: 114
-      Script: {instanceID: 3614}
+      Script: {instanceID: 3484}
     - Class: 114
-      Script: {instanceID: 3832}
+      Script: {instanceID: 3620}
     - Class: 114
-      Script: {instanceID: 4016}
+      Script: {instanceID: 3838}
     - Class: 114
-      Script: {instanceID: 4204}
+      Script: {instanceID: 4022}
     - Class: 114
-      Script: {instanceID: 4330}
+      Script: {instanceID: 4210}
     - Class: 114
-      Script: {instanceID: 4382}
+      Script: {instanceID: 4336}
     - Class: 114
-      Script: {instanceID: 4676}
+      Script: {instanceID: 4388}
     - Class: 114
-      Script: {instanceID: 4798}
+      Script: {instanceID: 4682}
     - Class: 114
-      Script: {instanceID: 4868}
+      Script: {instanceID: 4804}
     - Class: 114
-      Script: {instanceID: 4898}
+      Script: {instanceID: 4874}
     - Class: 114
-      Script: {instanceID: 5032}
+      Script: {instanceID: 4904}
     - Class: 114
-      Script: {instanceID: 5050}
+      Script: {instanceID: 5036}
     - Class: 114
-      Script: {instanceID: 5222}
+      Script: {instanceID: 5054}
     - Class: 114
-      Script: {instanceID: 5274}
+      Script: {instanceID: 5226}
     - Class: 114
-      Script: {instanceID: 5332}
+      Script: {instanceID: 5278}
     - Class: 114
-      Script: {instanceID: 5436}
+      Script: {instanceID: 5336}
     - Class: 114
-      Script: {instanceID: 5438}
+      Script: {instanceID: 5440}
     - Class: 114
-      Script: {instanceID: 5652}
+      Script: {instanceID: 5442}
     - Class: 114
-      Script: {instanceID: 5844}
+      Script: {instanceID: 5656}
     - Class: 114
-      Script: {instanceID: 6004}
+      Script: {instanceID: 5848}
     - Class: 114
-      Script: {instanceID: 6046}
+      Script: {instanceID: 6008}
+    - Class: 114
+      Script: {instanceID: 6050}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
+      Script: {instanceID: 0}
+    - Class: 134
+      Script: {instanceID: 0}
+    - Class: 135
       Script: {instanceID: 0}
     - Class: 136
       Script: {instanceID: 0}
@@ -406,6 +416,12 @@ ScriptsOnlyBuild:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: FullAutoGun
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
     namespaceName: TMPro
     className: TMP_DigitValidator
   - hash:
@@ -494,7 +510,7 @@ ScriptsOnlyBuild:
     className: UsernameDisplay
   - hash:
       serializedVersion: 2
-      Hash: 97ef6bf4e3bc4048120649a444e03eb5
+      Hash: d72b4fa7b49c0351117ffcb8d415eec8
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GunInfo
@@ -504,6 +520,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: CanvasScaler
+  - hash:
+      serializedVersion: 2
+      Hash: 492c4901f61856c8e3d6bc08f0b70624
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ProjectileGun
   - hash:
       serializedVersion: 2
       Hash: 4d16cfbaa8e821a2b370e80844a0e9bc
@@ -644,6 +666,12 @@ ScriptsOnlyBuild:
     className: SupportLogger
   - hash:
       serializedVersion: 2
+      Hash: b0c826d6949252bb356ea79fd4333276
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ProjectileInfo
+  - hash:
+      serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
@@ -660,12 +688,6 @@ ScriptsOnlyBuild:
     assemblyName: PhotonUnityNetworking.Utilities.dll
     namespaceName: Photon.Pun.UtilityScripts
     className: OnClickInstantiate
-  - hash:
-      serializedVersion: 2
-      Hash: 1739ef2c0bced73e5b6b01816e00bcd3
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: OLD_MouseLook
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -770,7 +792,7 @@ ScriptsOnlyBuild:
     className: TMP_FrameRateCounter
   - hash:
       serializedVersion: 2
-      Hash: ceb9cf1837dbfe2629d6d226c84b25ef
+      Hash: 5de4c9e0e0cc89f5ea7b953192157ab5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -1112,12 +1134,6 @@ ScriptsOnlyBuild:
     className: ControlPlayableAsset
   - hash:
       serializedVersion: 2
-      Hash: 978d2d4e3b4fc8562fea929ea3b27529
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: OLD_PlayerController
-  - hash:
-      serializedVersion: 2
       Hash: ef5c43f921427d03730f6ea4c848f07d
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
@@ -1380,12 +1396,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Postprocessing.Runtime.dll
     namespaceName: UnityEngine.Rendering.PostProcessing
     className: AmbientOcclusion
-  - hash:
-      serializedVersion: 2
-      Hash: 3c7e24863f5de69f7825392085c634e2
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: FullAutoGun
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

@@ -28,11 +28,18 @@ public class PauseMenu : MonoBehaviour
     {
         if(Input.GetKeyDown("escape"))
         {
-            Debug.Log("Hit ESCAPE!");
             isPaused = !isPaused;
             Cursor.lockState = (isPaused) ? CursorLockMode.Confined : CursorLockMode.Locked;
             Cursor.visible = isPaused;
             pauseMenu.SetActive(isPaused);
         }
     }
+
+    // public void Resume()
+    // {
+    //     isPaused = !isPaused;
+    //     Cursor.lockState = (isPaused) ? CursorLockMode.Confined : CursorLockMode.Locked;
+    //     Cursor.visible = isPaused;
+    //     pauseMenu.SetActive(isPaused);
+    // }
 }

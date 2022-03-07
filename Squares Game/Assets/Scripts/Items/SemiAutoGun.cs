@@ -13,7 +13,7 @@ public class SemiAutoGun : Gun
         PV = GetComponent<PhotonView>();
     }
 
-    public override void Use()
+    public override void Use(Vector3 tp)
     {
         //Debug.Log("Using: " + itemInfo.itemName);
         Shoot();

@@ -8,9 +8,12 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 {   
+    /************************* LOCAL VARIABLES *************************/
+    
     //Fields
     [SerializeField] float mouseSens, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     [SerializeField] GameObject camHolder;
+    [SerializeField] Camera cam;
     
 
     //In-Hand Items
@@ -36,8 +39,21 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] GameObject ui;
     [SerializeField] Image topHPBar;
     [SerializeField] PhotonView worldUI;
-    //[SerializeField] GameObject pauseMenu;
     bool isPaused = false;
+
+    /************************* MODIFIABLE STATS *************************/
+    
+    //Weapons
+    float damageMod, recoilMod, fireRateMod, bulletVelocityMod, cooldownSpeedMod, reloadTimeMod;
+    int magazineSizeMod, bulletsPerTapMod, bulletBounces;
+
+    //Player Movement
+    float moveSpeedMod, jumpForceMod;
+
+    //Player Other
+    float healthMod;
+
+    /************************* SCRIPT CORE FUNCTION *************************/
 
     void Awake()
     {
@@ -73,13 +89,18 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(!PV.IsMine)
             return;
         
+        //TODO get isAutomatic from current gun to dictate input, modify with player inputs
+        // if(items[itemIndex].GetComponent<ProjectileGun>().isAutomatic)
+        // {
+        //     Debug.Log("wow it works");
+        // }
         if(!isPaused)
         {
             MouseLook();
             Move();
             Jump();
             UpdateItem();
-            UseItem();
+            UseItem(); //where gun stats need to be fed
         }
 
         Pause();
@@ -128,7 +149,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         isGrounded = grounded;
     }
 
-    void FixedUpdate()
+    void FixedUpdate()      //TODO: Smooth player movement between FixedUpdate
     {
         if(!PV.IsMine)
             return;
@@ -211,10 +232,30 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     void UseItem()
     {
         //Using items in hand
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButton(0))  //now sends over at rapid fire
         {
-            items[itemIndex].Use();
+            //Debug.Log("Holding M1");
+            items[itemIndex].Use(Aim());
         }
+    }
+
+    Vector3 Aim()
+    {
+        Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+        ray.origin = cam.transform.position;
+        Vector3 targetPoint;
+        if(Physics.Raycast(ray, out RaycastHit hit))
+        {
+            targetPoint = hit.point;
+            //Debug.Log("Hit: " + hit.collider.gameObject.name);                                                        //OLD METHOD TO SHOOT AND DAMAGE
+            //hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage);
+            //PV.RPC("RPC_Shoot", RpcTarget.All, hit.point, hit.normal);
+        }
+        else
+        {
+            targetPoint = ray.GetPoint(75); //Just a point far away from the player
+        }
+        return targetPoint;
     }
 
     /************************* DAMAGE *************************/
@@ -256,16 +297,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(Input.GetKeyDown("escape"))
         {
             isPaused = !isPaused;
-            //Cursor.lockState = (isPaused) ? CursorLockMode.Confined : CursorLockMode.Locked;
-            //pauseMenu.SetActive(isPaused);
         }
     }
-
-    // void MouseClick()
-    // {
-    //     if(Input.GetMouseButtonDown(0))
-    //     {
-    //         Debug.Log("test");
-    //     }
-    // }
 }
