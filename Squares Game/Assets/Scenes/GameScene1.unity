@@ -4628,7 +4628,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   container: {fileID: 1477088755}
-  killItemPrefab: {fileID: 0}
+  killItemPrefab: {fileID: 3655778343343534327, guid: 10be94606b26fc045b687d4bfe6b447f, type: 3}
 --- !u!1 &876594000
 GameObject:
   m_ObjectHideFlags: 0

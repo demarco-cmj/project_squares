@@ -10,11 +10,12 @@ public class PlayerManager : MonoBehaviour
     PhotonView PV;
 
     GameObject controller;
-    private KillFeed killFeedUI;
+    private GameObject universalUI;
 
     void Awake()
     {
         PV = GetComponent<PhotonView>();
+        universalUI = GameObject.FindWithTag("KillFeed");
     }
     
     void Start()
@@ -42,7 +43,7 @@ public class PlayerManager : MonoBehaviour
 
     void TraceKill(string killer, string body)
     {   
-        //Debug.Log("New feed: " + killer +  " killed " + body);
+        Debug.Log("New feed: " + killer +  " killed " + body);
         string killFeed = killer +  " killed " + body;
         PV.RPC("RPC_TraceKill", RpcTarget.All, killFeed);
     }
@@ -50,6 +51,7 @@ public class PlayerManager : MonoBehaviour
     [PunRPC]
     void RPC_TraceKill(string killFeedText)
     {
+        universalUI.GetComponent<KillFeed>().CreateItem(killFeedText);
         //killFeedUI.CreateItem(killFeedText);
     }
 }

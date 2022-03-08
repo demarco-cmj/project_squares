@@ -12,5 +12,6 @@ public class KillFeed : MonoBehaviour
     {
         KillFeedItem item = Instantiate(killItemPrefab, container).GetComponent<KillFeedItem>();
         item.Initialize(text);
+        Destroy(item, 5f);
     }
 }
