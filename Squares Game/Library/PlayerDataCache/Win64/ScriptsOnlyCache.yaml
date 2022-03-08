@@ -3,6 +3,8 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - Billboard
     - GunInfo
+    - KillFeed
+    - KillFeedItem
     - Launcher
     - Menu
     - MenuManager
@@ -16,7 +18,8 @@ ScriptsOnlyBuild:
     - ProjectileInfo
     - RoomListItem
     - RoomManager
-    - SemiAutoGun
+    - Scoreboard
+    - ScoreboardItem
     - SpawnManager
     - Spawnpoint
     - UsernameDisplay
@@ -97,11 +100,23 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
+      Script: {instanceID: 1582}
+    - Class: 114
+      Script: {instanceID: 1980}
+    - Class: 114
       Script: {instanceID: 2652}
+    - Class: 114
+      Script: {instanceID: 2820}
     - Class: 114
       Script: {instanceID: 2970}
     - Class: 114
+      Script: {instanceID: 3022}
+    - Class: 114
+      Script: {instanceID: 3210}
+    - Class: 114
       Script: {instanceID: 3484}
+    - Class: 114
+      Script: {instanceID: 4022}
     - Class: 114
       Script: {instanceID: 4210}
     - Class: 114
@@ -116,11 +131,25 @@ ScriptsOnlyBuild:
       Script: {instanceID: 6008}
     - Class: 114
       Script: {instanceID: 6050}
+    - Class: 114
+      Script: {instanceID: 48000}
+    - Class: 114
+      Script: {instanceID: 64884}
+    - Class: 114
+      Script: {instanceID: 64974}
     - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
       Script: {instanceID: 0}
     - Class: 258
       Script: {instanceID: 0}
@@ -175,8 +204,6 @@ ScriptsOnlyBuild:
       Script: {instanceID: 2488}
     - Class: 114
       Script: {instanceID: 2510}
-    - Class: 114
-      Script: {instanceID: 2580}
     - Class: 114
       Script: {instanceID: 2652}
     - Class: 114
@@ -245,6 +272,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 6008}
     - Class: 114
       Script: {instanceID: 6050}
+    - Class: 114
+      Script: {instanceID: 64884}
+    - Class: 114
+      Script: {instanceID: 81200}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -477,7 +508,7 @@ ScriptsOnlyBuild:
       Hash: 662b6b6e2a43d50ff1a2f912ed220613
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: SemiAutoGun
+    className: RayGun
   - hash:
       serializedVersion: 2
       Hash: a1f19ad47d3094e235f21b74dfc423a8
@@ -666,7 +697,7 @@ ScriptsOnlyBuild:
     className: SupportLogger
   - hash:
       serializedVersion: 2
-      Hash: b0c826d6949252bb356ea79fd4333276
+      Hash: 6ab028127b4a1b087644455f9aea2f85
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ProjectileInfo
@@ -1396,6 +1427,36 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Postprocessing.Runtime.dll
     namespaceName: UnityEngine.Rendering.PostProcessing
     className: AmbientOcclusion
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Card
+  - hash:
+      serializedVersion: 2
+      Hash: 309c5755aadf909cacc44b9a85286a83
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: KillFeed
+  - hash:
+      serializedVersion: 2
+      Hash: f3e0ccc909078bf813591a07a4d3bf3a
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ScoreboardItem
+  - hash:
+      serializedVersion: 2
+      Hash: 455be9d8036ff4012c577bab0854bd5b
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Scoreboard
+  - hash:
+      serializedVersion: 2
+      Hash: aa6fb755549fb315b7b48182183238ca
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: KillFeedItem
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

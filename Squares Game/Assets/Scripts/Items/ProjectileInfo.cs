@@ -7,6 +7,7 @@ public class ProjectileInfo : MonoBehaviour
 {
     public float damage;
     public int bouncesLeft;
+    public string owner;
     public GameObject current;
     Rigidbody rb;
     Vector3 location;
@@ -16,12 +17,12 @@ public class ProjectileInfo : MonoBehaviour
         if(collision.gameObject.tag == "Player")
         {
             //deal damage to player, despawn proj
-            collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
+            collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage, owner);
             Destroy(current);
         }
         else
         {
-            //reduce bounce count or despawn
+            //TODO: reduce bounce count or despawn
         }
 
 

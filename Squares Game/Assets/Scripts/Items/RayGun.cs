@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class SemiAutoGun : Gun
+public class RayGun : Gun
 {
     [SerializeField] Camera cam;
     PhotonView PV;
@@ -26,7 +26,7 @@ public class SemiAutoGun : Gun
         if(Physics.Raycast(ray, out RaycastHit hit))
         {
             //Debug.Log("Hit: " + hit.collider.gameObject.name);
-            hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage);
+            hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage, PV.Owner.NickName);
             PV.RPC("RPC_Shoot", RpcTarget.All, hit.point, hit.normal);
         }
     }
