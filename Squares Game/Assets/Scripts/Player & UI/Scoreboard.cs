@@ -52,4 +52,31 @@ public class Scoreboard : MonoBehaviourPunCallbacks
         Destroy(scoreboardList[player].gameObject);
         scoreboardList.Remove(player);
     }
+
+    public void IncrementDeaths(string name)
+    {
+        Player target = GetPlayerWithName(name);
+        int temp = int.Parse(scoreboardList[target].deathsText.text) + 1;
+        scoreboardList[target].deathsText.text =  temp.ToString();
+    }
+
+    public void IncrementKills(string name)
+    {
+        Player target = GetPlayerWithName(name);
+        int temp = int.Parse(scoreboardList[target].killsText.text) + 1;
+        scoreboardList[target].killsText.text =  temp.ToString();
+    }
+
+    Player GetPlayerWithName(string name)
+    {
+        foreach(Player player in PhotonNetwork.PlayerList)
+        {
+            if(player.NickName == name)
+            {
+                return player;
+            }
+        }
+        Debug.Log("Player does not exist");
+        return null;
+    }
 }
