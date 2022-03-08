@@ -140,7 +140,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         //Fall out of world
         if(transform.position.y < -10f)
         {
-            Die(PV.Owner.NickName);
+            Die(PV.Owner.NickName, true);
         }
     }
     
@@ -281,13 +281,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
         if(currentHealth <= 0)
         {
-            Die(killer);
+            Die(killer, false);
         }
     }
 
-    void Die(string killer)
+    void Die(string killer, bool suicide)
     {
-        playerManager.Die(killer, PV.Owner.NickName);
+        playerManager.Die(killer, PV.Owner.NickName, suicide);
     }
 
     /************************* MENUS *************************/

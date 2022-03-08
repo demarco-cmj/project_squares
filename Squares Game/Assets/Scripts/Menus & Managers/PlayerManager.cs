@@ -36,26 +36,28 @@ public class PlayerManager : MonoBehaviour
         controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnpoint.position, spawnpoint.rotation, 0, new object[] {PV.ViewID});
     }
 
-    public void Die(string killer, string body)
+    public void Die(string killer, string body, bool suicide)
     {
         PhotonNetwork.Destroy(controller);
-        TraceKill(killer, body);
+        TraceKill(killer, body, suicide);
         CreateController();
     }
 
-    void TraceKill(string killer, string body)
+    void TraceKill(string killer, string body, bool suicide)
     {   
         //Debug.Log("New feed: " + killer +  " killed " + body);
-        PV.RPC("RPC_TraceKill", RpcTarget.All, killer, body);
+        PV.RPC("RPC_TraceKill", RpcTarget.All, killer, body, suicide);
     }
 
     [PunRPC]
-    void RPC_TraceKill(string killer, string body)
+    void RPC_TraceKill(string killer, string body, bool suicide)
     {
         string killFeedText = killer +  " killed " + body;
         killFeedObj.GetComponent<KillFeed>().CreateItem(killFeedText);
-        scoreboardObj.GetComponent<Scoreboard>().IncrementKills(killer);
+        if(!suicide)
+        {
+            scoreboardObj.GetComponent<Scoreboard>().IncrementKills(killer);
+        }
         scoreboardObj.GetComponent<Scoreboard>().IncrementDeaths(body);
-        //killFeedUI.CreateItem(killFeedText);
     }
 }
