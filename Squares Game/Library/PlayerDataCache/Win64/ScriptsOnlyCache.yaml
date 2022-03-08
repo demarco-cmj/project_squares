@@ -23,6 +23,8 @@ ScriptsOnlyBuild:
     - SpawnManager
     - Spawnpoint
     - UsernameDisplay
+    PhotonUnityNetworking.Editor.dll:
+    - Photon.Pun.PunSceneSettings
     PhotonUnityNetworking.dll:
     - Photon.Pun.PhotonTransformView
     - Photon.Pun.PhotonView
@@ -183,8 +185,6 @@ ScriptsOnlyBuild:
     - Class: 72
       Script: {instanceID: 0}
     - Class: 81
-      Script: {instanceID: 0}
-    - Class: 89
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}

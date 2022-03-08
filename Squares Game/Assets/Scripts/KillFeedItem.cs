@@ -11,5 +11,6 @@ public class KillFeedItem : MonoBehaviour
     public void Initialize(string feedMessage)
     {
         feedText.text = feedMessage;
+        Destroy(gameObject, 5);
     }
 }
