@@ -140,7 +140,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         //Fall out of world
         if(transform.position.y < -10f)
         {
-            Die();
+            Die(PV.Owner.NickName, true);
         }
     }
     
@@ -260,14 +260,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     /************************* DAMAGE *************************/
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, string killer)
     {
         //Debug.Log("Dealt: " + damage);
-        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, killer);
     }
 
     [PunRPC] //Finds correct target within PUN //RPC == Remote Procedure Call
-    void RPC_TakeDamage(float damage)
+    void RPC_TakeDamage(float damage, string killer)
     {
         if(!PV.IsMine)
             return;
@@ -281,13 +281,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
         if(currentHealth <= 0)
         {
-            Die();
+            Die(killer, false);
         }
     }
 
-    void Die()
+    void Die(string killer, bool suicide)
     {
-        playerManager.Die();
+        playerManager.Die(killer, PV.Owner.NickName, suicide);
     }
 
     /************************* MENUS *************************/

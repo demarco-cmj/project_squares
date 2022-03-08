@@ -47,11 +47,11 @@ public class ProjectileGun : Gun
     void Shoot(Vector3 tp)
     {
         lastShot = Time.time;
-        PV.RPC("RPC_Shoot", RpcTarget.All, tp);
+        PV.RPC("RPC_Shoot", RpcTarget.All, tp, PV.Owner.NickName);
     }
 
     [PunRPC]
-    void RPC_Shoot(Vector3 targetPoint)
+    void RPC_Shoot(Vector3 targetPoint, string owner)
     {
         //Debug.Log("SHOOTING PROJECTILE");
 
@@ -62,8 +62,9 @@ public class ProjectileGun : Gun
         GameObject currentBullet = Instantiate(((GunInfo)itemInfo).projectile, muzzle.position, Quaternion.identity); //store instantiated bullet in currentBullet
         currentBullet.transform.forward = direction.normalized;
 
-        //Set Bullets damage and bounces
+        //Set Bullet's local info
         currentBullet.GetComponent<ProjectileInfo>().damage = ((GunInfo)itemInfo).damage;
+        currentBullet.GetComponent<ProjectileInfo>().owner = owner;
 
         //Add forces to bullet
         currentBullet.GetComponent<Rigidbody>().AddForce(direction.normalized * ((GunInfo)itemInfo).bulletVelocity, ForceMode.Impulse);
