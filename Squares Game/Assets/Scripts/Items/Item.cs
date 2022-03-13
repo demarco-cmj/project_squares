@@ -10,4 +10,8 @@ public abstract class Item : MonoBehaviour
     public abstract void Use(Vector3 tp);
 
     public abstract void Reload();
+
+    public abstract void UpdateHUD();
+
+    public abstract void CancelUpdate();
 }

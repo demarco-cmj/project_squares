@@ -156,18 +156,23 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
      void EquipItem(int tempIndex)
      {
-         if(tempIndex == prevItemIndex)
-            return;
+        if(tempIndex == prevItemIndex)
+           return;
 
-         itemIndex = tempIndex;
-         items[itemIndex].itemObj.SetActive(true);
+        items[itemIndex].CancelUpdate(); //Cancel incomplete reload of previous item
 
-         if(prevItemIndex != -1)
-         {
-             items[prevItemIndex].itemObj.SetActive(false);
-         }
+        itemIndex = tempIndex;
+        items[itemIndex].itemObj.SetActive(true);
+        items[itemIndex].UpdateHUD(); //Update player HUD to current gun
+        
 
-         prevItemIndex = itemIndex;
+        if(prevItemIndex != -1)
+        {
+            items[prevItemIndex].itemObj.SetActive(false);
+        }
+        
+        
+        prevItemIndex = itemIndex;
 
         //Sync With other players, E7@3:00
         if(PV.IsMine)

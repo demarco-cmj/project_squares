@@ -10,23 +10,20 @@ public class ProjectileGun : Gun
     [SerializeField] Camera cam;
     PhotonView PV;
 
-    public GameObject tempProjectile;
-    bool reloading;
+    public bool reloading;
     public Transform muzzle;
     float timeBetweenShots, lastShot;
 
     public TMP_Text ammoText;
-    int bulletsLeft;
+    int bulletsLeft, bulletsMax;
 
     void Awake()
     {
         PV = GetComponent<PhotonView>();
         timeBetweenShots = 60 / ((GunInfo)itemInfo).fireRate; //Measured in rounds/min
         lastShot = -1f;
-        bulletsLeft = ((GunInfo)itemInfo).magazineSize;
-        SetAmmoText();
-
-        
+        bulletsMax = bulletsLeft = ((GunInfo)itemInfo).magazineSize;
+        SetAmmoText();        
     }
 
     public override void Use(Vector3 tp)
@@ -52,11 +49,15 @@ public class ProjectileGun : Gun
 
     void Shoot(Vector3 tp)
     {
-        if(bulletsLeft > ((GunInfo)itemInfo).magazineSize)
+        if(!reloading && bulletsLeft > 0)
         {
             bulletsLeft--;
             lastShot = Time.time;
             SetAmmoText();
+            if(bulletsLeft == 0)
+                {
+                    Reload();
+                }
             PV.RPC("RPC_Shoot", RpcTarget.All, tp, PV.Owner.NickName);
         }
         else
@@ -70,25 +71,38 @@ public class ProjectileGun : Gun
     {
         if(reloading)
             return;
-        
-        float startTime = Time.time;
+        //Debug.Log("Reloading now");
         reloading = true;
+        Invoke("CompleteReload", ((GunInfo)itemInfo).reloadTime);
         //Play animation here?
-        // while(reloading)  //Find better wait method thats accurate? Maybe Invoke(ReloadDone(), reloadTime);?
-        // {
-        //     if(Time.time - startTime >= ((GunInfo)itemInfo).reloadTime)
-        //     {
-        //         reloading = false;
-        //     }
-        // }
+    }
+
+    void CompleteReload()
+    {
         bulletsLeft = ((GunInfo)itemInfo).magazineSize;
         SetAmmoText();
-
+        reloading = false;
+        //Debug.Log("Reloading done");
     }
 
     void SetAmmoText()
     {
         ammoText.text = bulletsLeft.ToString();
+    }
+
+    public override void UpdateHUD()
+    {
+        if(itemObj.activeInHierarchy)
+        {
+            SetAmmoText();
+        }
+    }
+
+    public override void CancelUpdate()
+    {
+        //Debug.Log("Reloading canceled");
+        CancelInvoke("CompleteReload");
+        reloading = false;
     }
 
     [PunRPC]

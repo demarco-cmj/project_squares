@@ -36,6 +36,16 @@ public class RayGun : Gun
 
     }
 
+    public override void UpdateHUD()
+    {
+
+    }
+
+    public override void CancelUpdate()
+    {
+        CancelInvoke();
+    }
+
     [PunRPC]
     void RPC_Shoot(Vector3 hitPosition, Vector3 hitNormal)
     {

@@ -9,5 +9,9 @@ public abstract class Gun : Item
     public abstract override void Use(Vector3 tp);
 
     public abstract override void Reload();
+
+    public abstract override void UpdateHUD();
+
+    public abstract override void CancelUpdate();
        
 }
