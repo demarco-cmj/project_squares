@@ -12,14 +12,4 @@ public class ScoreboardItem : MonoBehaviour
     {
         usernameText.text = player.NickName;
     }
-
-    public void IncrementKills()
-    {
-
-    }
-
-    public void IncrementDeaths()
-    {
-
-    }
 }

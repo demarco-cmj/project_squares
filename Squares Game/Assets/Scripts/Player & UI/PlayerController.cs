@@ -88,12 +88,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         //Only Update for your own client's info
         if(!PV.IsMine)
             return;
-        
-        //TODO get isAutomatic from current gun to dictate input, modify with player inputs
-        // if(items[itemIndex].GetComponent<ProjectileGun>().isAutomatic)
-        // {
-        //     Debug.Log("wow it works");
-        // }
+
         if(!isPaused)
         {
             MouseLook();
@@ -237,6 +232,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             //Debug.Log("Holding M1");
             items[itemIndex].Use(Aim());
         }
+        else if(Input.GetKeyDown("r")) //If player wants to reload
+        {
+            items[itemIndex].Reload();
+        }
     }
 
     Vector3 Aim()
@@ -247,9 +246,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(Physics.Raycast(ray, out RaycastHit hit))
         {
             targetPoint = hit.point;
-            //Debug.Log("Hit: " + hit.collider.gameObject.name);                                                        //OLD METHOD TO SHOOT AND DAMAGE
-            //hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage);
-            //PV.RPC("RPC_Shoot", RpcTarget.All, hit.point, hit.normal);
         }
         else
         {

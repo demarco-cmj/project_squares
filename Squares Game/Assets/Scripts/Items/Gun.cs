@@ -4,7 +4,10 @@ using UnityEngine;
 
 public abstract class Gun : Item
 {
-    public abstract override void Use(Vector3 tp);
-    
     public GameObject bulletImpactPrefab;
+    
+    public abstract override void Use(Vector3 tp);
+
+    public abstract override void Reload();
+       
 }

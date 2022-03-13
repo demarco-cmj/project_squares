@@ -15,11 +15,17 @@ public class ProjectileGun : Gun
     public Transform muzzle;
     float timeBetweenShots, lastShot;
 
+    public TMP_Text ammoText;
+    int bulletsLeft;
+
     void Awake()
     {
         PV = GetComponent<PhotonView>();
         timeBetweenShots = 60 / ((GunInfo)itemInfo).fireRate; //Measured in rounds/min
         lastShot = -1f;
+        bulletsLeft = ((GunInfo)itemInfo).magazineSize;
+        SetAmmoText();
+
         
     }
 
@@ -46,8 +52,43 @@ public class ProjectileGun : Gun
 
     void Shoot(Vector3 tp)
     {
-        lastShot = Time.time;
-        PV.RPC("RPC_Shoot", RpcTarget.All, tp, PV.Owner.NickName);
+        if(bulletsLeft > ((GunInfo)itemInfo).magazineSize)
+        {
+            bulletsLeft--;
+            lastShot = Time.time;
+            SetAmmoText();
+            PV.RPC("RPC_Shoot", RpcTarget.All, tp, PV.Owner.NickName);
+        }
+        else
+        {
+            Reload();
+        }
+
+    }
+
+    public override void Reload()
+    {
+        if(reloading)
+            return;
+        
+        float startTime = Time.time;
+        reloading = true;
+        //Play animation here?
+        // while(reloading)  //Find better wait method thats accurate? Maybe Invoke(ReloadDone(), reloadTime);?
+        // {
+        //     if(Time.time - startTime >= ((GunInfo)itemInfo).reloadTime)
+        //     {
+        //         reloading = false;
+        //     }
+        // }
+        bulletsLeft = ((GunInfo)itemInfo).magazineSize;
+        SetAmmoText();
+
+    }
+
+    void SetAmmoText()
+    {
+        ammoText.text = bulletsLeft.ToString();
     }
 
     [PunRPC]
