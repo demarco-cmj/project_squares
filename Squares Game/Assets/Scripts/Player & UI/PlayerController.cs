@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] PhotonView worldUI;
     bool isPaused = false;
 
+    public GameObject damagePopupPrefab, damagePlane;
+
     /************************* MODIFIABLE STATS *************************/
     
     //Weapons
@@ -265,6 +267,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     {
         //Debug.Log("Dealt: " + damage);
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, killer);
+        //PV.RPC("RPC_ShowDamage", RpcTarget.All, damage);
     }
 
     [PunRPC] //Finds correct target within PUN //RPC == Remote Procedure Call
@@ -289,6 +292,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     void Die(string killer, bool suicide)
     {
         playerManager.Die(killer, PV.Owner.NickName, suicide);
+    }
+
+    [PunRPC]
+    void RPC_ShowDamage(float damage)
+    {
+        GameObject popupObj = Instantiate(damagePopupPrefab, damagePlane.transform);
+        popupObj.GetComponent<DamagePopup>().SetDamage(damage);
+        Destroy(popupObj, 2f);
     }
 
     /************************* MENUS *************************/

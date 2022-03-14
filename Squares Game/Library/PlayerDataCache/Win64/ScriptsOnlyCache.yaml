@@ -339,7 +339,7 @@ ScriptsOnlyBuild:
     className: TMP_InputField
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+      Hash: 4d9f9c1395d95642c2dd107b9b67ceb5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Card
@@ -849,7 +849,7 @@ ScriptsOnlyBuild:
     className: TMP_FrameRateCounter
   - hash:
       serializedVersion: 2
-      Hash: 5de4c9e0e0cc89f5ea7b953192157ab5
+      Hash: d9d3d23794a7c23e011907fe0d940420
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -1459,6 +1459,18 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Postprocessing.Runtime.dll
     namespaceName: UnityEngine.Rendering.PostProcessing
     className: AmbientOcclusion
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Deck
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: DamagePopup
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

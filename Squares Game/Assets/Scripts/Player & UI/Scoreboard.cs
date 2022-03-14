@@ -28,6 +28,12 @@ public class Scoreboard : MonoBehaviourPunCallbacks
             active = !active;
             scoreboardUI.SetActive(active);
         }
+
+        if(Input.GetKeyUp(KeyCode.Tab))
+        {
+            active = !active;
+            scoreboardUI.SetActive(active);
+        }
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
