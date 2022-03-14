@@ -88,12 +88,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         //Only Update for your own client's info
         if(!PV.IsMine)
             return;
-        
-        //TODO get isAutomatic from current gun to dictate input, modify with player inputs
-        // if(items[itemIndex].GetComponent<ProjectileGun>().isAutomatic)
-        // {
-        //     Debug.Log("wow it works");
-        // }
+
         if(!isPaused)
         {
             MouseLook();
@@ -161,18 +156,23 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
      void EquipItem(int tempIndex)
      {
-         if(tempIndex == prevItemIndex)
-            return;
+        if(tempIndex == prevItemIndex)
+           return;
 
-         itemIndex = tempIndex;
-         items[itemIndex].itemObj.SetActive(true);
+        items[itemIndex].CancelUpdate(); //Cancel incomplete reload of previous item
 
-         if(prevItemIndex != -1)
-         {
-             items[prevItemIndex].itemObj.SetActive(false);
-         }
+        itemIndex = tempIndex;
+        items[itemIndex].itemObj.SetActive(true);
+        items[itemIndex].UpdateHUD(); //Update player HUD to current gun
+        
 
-         prevItemIndex = itemIndex;
+        if(prevItemIndex != -1)
+        {
+            items[prevItemIndex].itemObj.SetActive(false);
+        }
+        
+        
+        prevItemIndex = itemIndex;
 
         //Sync With other players, E7@3:00
         if(PV.IsMine)
@@ -237,6 +237,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             //Debug.Log("Holding M1");
             items[itemIndex].Use(Aim());
         }
+        else if(Input.GetKeyDown("r")) //If player wants to reload
+        {
+            items[itemIndex].Reload();
+        }
     }
 
     Vector3 Aim()
@@ -247,9 +251,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(Physics.Raycast(ray, out RaycastHit hit))
         {
             targetPoint = hit.point;
-            //Debug.Log("Hit: " + hit.collider.gameObject.name);                                                        //OLD METHOD TO SHOOT AND DAMAGE
-            //hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage);
-            //PV.RPC("RPC_Shoot", RpcTarget.All, hit.point, hit.normal);
         }
         else
         {

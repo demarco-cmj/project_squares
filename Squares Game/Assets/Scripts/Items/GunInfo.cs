@@ -10,8 +10,4 @@ public class GunInfo : ItemInfo
     public bool isAutomatic;
     public GameObject projectile;
 
-    // GameObject shootBullet(float dmg)
-    // {
-    //     GameObject currentBullet = Instantiate(((GunInfo)itemInfo).projectile, muzzle.position, Quaternion.identity);
-    // }
 }

@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Phys1
   m_EditorClassIdentifier: 
   itemName: Auto1
-  damage: 7
+  damage: 25
   recoil: 4
   fireRate: 60
   cooldownSpeed: 10
-  reloadTime: 5
-  bulletVelocity: 60
-  magazineSize: 15
+  reloadTime: 4
+  bulletVelocity: 100
+  magazineSize: 5
   bulletsPerTap: 1
   isAutomatic: 0
   projectile: {fileID: 3368005620101185373, guid: a98f66bbd100a514397b482468fae5e6, type: 3}

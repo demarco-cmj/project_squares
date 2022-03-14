@@ -8,4 +8,10 @@ public abstract class Item : MonoBehaviour
     public GameObject itemObj;
 
     public abstract void Use(Vector3 tp);
+
+    public abstract void Reload();
+
+    public abstract void UpdateHUD();
+
+    public abstract void CancelUpdate();
 }
