@@ -1815,8 +1815,8 @@ MonoBehaviour:
   - {fileID: 1202679302076846769}
   - {fileID: 7963804700900185919}
   healthbarImg: {fileID: 6561686105781245423}
+  healthbarImgWorld: {fileID: 4756522241839364585}
   ui: {fileID: 3535913265824689239}
-  topHPBar: {fileID: 4756522241839364585}
   worldUI: {fileID: 6251353344837359841}
   damagePopupPrefab: {fileID: 3105634810790222946, guid: 060c19da439f11d42a028e734ec1d2a6, type: 3}
   damagePlane: {fileID: 245345313975301328}

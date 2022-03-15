@@ -36,8 +36,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     float currentHealth = maxHealth;
     PlayerManager playerManager;
     [SerializeField] Image healthbarImg;
+    [SerializeField] Image healthbarImgWorld;
     [SerializeField] GameObject ui;
-    [SerializeField] Image topHPBar;
+    //[SerializeField] Image topHPBar;
     [SerializeField] PhotonView worldUI;
     bool isPaused = false;
 
@@ -267,6 +268,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     {
         //Debug.Log("Dealt: " + damage);
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, killer);
+        PV.RPC("RPC_UpdateHealthBar", RpcTarget.All, currentHealth, damage, maxHealth);
         //PV.RPC("RPC_ShowDamage", RpcTarget.All, damage);
     }
 
@@ -281,7 +283,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         currentHealth -= damage;
 
         healthbarImg.fillAmount = currentHealth / maxHealth; //Modify health bar as a percentage
-        topHPBar.fillAmount = currentHealth / maxHealth;
 
         if(currentHealth <= 0)
         {
@@ -300,6 +301,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         GameObject popupObj = Instantiate(damagePopupPrefab, damagePlane.transform);
         popupObj.GetComponent<DamagePopup>().SetDamage(damage);
         Destroy(popupObj, 2f);
+    }
+
+    [PunRPC]
+    void RPC_UpdateHealthBar(float curHP, float dam, float maxHP) //needs parameters passed so remote clients dont use their own health vars
+    {
+        healthbarImgWorld.fillAmount = (curHP - dam) / maxHP;
     }
 
     /************************* MENUS *************************/

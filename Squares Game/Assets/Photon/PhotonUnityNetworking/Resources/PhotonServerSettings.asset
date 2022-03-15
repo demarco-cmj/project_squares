@@ -44,6 +44,7 @@ MonoBehaviour:
   - Shoot
   - RPC_TraceKill
   - RPC_ShowDamage
+  - RPC_UpdateHealthBar
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0
