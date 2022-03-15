@@ -115,7 +115,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 245345313975301328}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.786}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4424311216382619904}
@@ -1819,7 +1819,7 @@ MonoBehaviour:
   ui: {fileID: 3535913265824689239}
   worldUI: {fileID: 6251353344837359841}
   damagePopupPrefab: {fileID: 3105634810790222946, guid: 060c19da439f11d42a028e734ec1d2a6, type: 3}
-  damagePlane: {fileID: 245345313975301328}
+  damagePlane: {fileID: 8861108445748470205}
 --- !u!114 &2808825371136111156
 MonoBehaviour:
   m_ObjectHideFlags: 0

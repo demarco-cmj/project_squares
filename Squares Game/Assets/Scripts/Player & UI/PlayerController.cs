@@ -269,7 +269,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         //Debug.Log("Dealt: " + damage);
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, killer);
         PV.RPC("RPC_UpdateHealthBar", RpcTarget.All, currentHealth, damage, maxHealth);
-        //PV.RPC("RPC_ShowDamage", RpcTarget.All, damage);
+        PV.RPC("RPC_ShowDamage", RpcTarget.All, damage);
     }
 
     [PunRPC] //Finds correct target within PUN //RPC == Remote Procedure Call
@@ -299,7 +299,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     void RPC_ShowDamage(float damage)
     {
         GameObject popupObj = Instantiate(damagePopupPrefab, damagePlane.transform);
-        popupObj.GetComponent<DamagePopup>().SetDamage(damage);
+        //popupObj.GetComponent<DamagePopup>().SetDamage(damage);
         Destroy(popupObj, 2f);
     }
 
