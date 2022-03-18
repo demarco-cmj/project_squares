@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    List<Card> deckList = new List<Card>();
+
+    public void AddCard()
+    {
+
+    }
+
+    public void RemoveCard()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void CompileDeck()
     {
-        
+
     }
+
 }
