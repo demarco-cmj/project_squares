@@ -38,11 +38,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] Image healthbarImg;
     [SerializeField] Image healthbarImgWorld;
     [SerializeField] GameObject ui;
-    //[SerializeField] Image topHPBar;
     [SerializeField] PhotonView worldUI;
     bool isPaused = false;
 
     public GameObject damagePopupPrefab, damagePlane;
+    [SerializeField] GameObject[] damageSpawns;
 
     /************************* MODIFIABLE STATS *************************/
     
@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     {
         if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.AddForce(transform.up * jumpForce);
+            rb.AddForce(transform.up * (jumpForce * 50)); //multiply jump force by weight of player
         }
     }
 
@@ -298,7 +298,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [PunRPC]
     void RPC_ShowDamage(float damage)
     {
-        GameObject popupObj = Instantiate(damagePopupPrefab, damagePlane.transform);
+        GameObject popupObj = Instantiate(damagePopupPrefab, damageSpawns[Random.Range(0, damageSpawns.Length)].transform);
         popupObj.GetComponent<DamagePopup>().SetDamage(damage);
         Destroy(popupObj, 2f);
     }
