@@ -7,7 +7,7 @@ using TMPro;
 
 public class DamagePopup : MonoBehaviour
 {
-    TMP_Text damageText;
+    [SerializeField] TMP_Text damageText;
 
     // void Start()
     // {

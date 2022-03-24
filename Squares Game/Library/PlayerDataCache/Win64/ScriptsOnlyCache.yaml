@@ -2,6 +2,7 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - Billboard
+    - DamagePopup
     - GunInfo
     - KillFeed
     - KillFeedItem
@@ -102,43 +103,43 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1582}
     - Class: 114
-      Script: {instanceID: 1980}
+      Script: {instanceID: 1982}
     - Class: 114
-      Script: {instanceID: 2652}
+      Script: {instanceID: 2654}
     - Class: 114
-      Script: {instanceID: 2790}
+      Script: {instanceID: 2792}
     - Class: 114
-      Script: {instanceID: 2822}
+      Script: {instanceID: 2824}
     - Class: 114
-      Script: {instanceID: 2972}
+      Script: {instanceID: 2974}
     - Class: 114
-      Script: {instanceID: 3024}
+      Script: {instanceID: 3026}
     - Class: 114
-      Script: {instanceID: 3046}
+      Script: {instanceID: 3048}
     - Class: 114
-      Script: {instanceID: 3214}
+      Script: {instanceID: 3216}
     - Class: 114
-      Script: {instanceID: 3490}
+      Script: {instanceID: 3492}
     - Class: 114
-      Script: {instanceID: 3630}
+      Script: {instanceID: 3632}
     - Class: 114
-      Script: {instanceID: 4032}
+      Script: {instanceID: 4034}
     - Class: 114
-      Script: {instanceID: 4220}
+      Script: {instanceID: 4222}
     - Class: 114
-      Script: {instanceID: 4258}
+      Script: {instanceID: 4260}
     - Class: 114
-      Script: {instanceID: 4886}
+      Script: {instanceID: 4888}
     - Class: 114
-      Script: {instanceID: 5312}
+      Script: {instanceID: 5314}
     - Class: 114
-      Script: {instanceID: 5814}
+      Script: {instanceID: 5816}
     - Class: 114
-      Script: {instanceID: 5860}
+      Script: {instanceID: 5862}
     - Class: 114
-      Script: {instanceID: 6020}
+      Script: {instanceID: 6022}
     - Class: 114
-      Script: {instanceID: 6062}
+      Script: {instanceID: 6064}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -195,89 +196,91 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1582}
     - Class: 114
-      Script: {instanceID: 1694}
+      Script: {instanceID: 1696}
     - Class: 114
-      Script: {instanceID: 1810}
+      Script: {instanceID: 1812}
     - Class: 114
-      Script: {instanceID: 1980}
+      Script: {instanceID: 1982}
     - Class: 114
-      Script: {instanceID: 2382}
+      Script: {instanceID: 2384}
     - Class: 114
-      Script: {instanceID: 2488}
+      Script: {instanceID: 2490}
     - Class: 114
-      Script: {instanceID: 2510}
+      Script: {instanceID: 2512}
     - Class: 114
-      Script: {instanceID: 2652}
+      Script: {instanceID: 2654}
     - Class: 114
-      Script: {instanceID: 2734}
+      Script: {instanceID: 2736}
     - Class: 114
-      Script: {instanceID: 2770}
+      Script: {instanceID: 2772}
     - Class: 114
-      Script: {instanceID: 2822}
+      Script: {instanceID: 2824}
     - Class: 114
-      Script: {instanceID: 2840}
+      Script: {instanceID: 2842}
     - Class: 114
-      Script: {instanceID: 2972}
+      Script: {instanceID: 2974}
     - Class: 114
-      Script: {instanceID: 3024}
+      Script: {instanceID: 3026}
     - Class: 114
-      Script: {instanceID: 3046}
+      Script: {instanceID: 3048}
     - Class: 114
-      Script: {instanceID: 3142}
+      Script: {instanceID: 3144}
     - Class: 114
-      Script: {instanceID: 3214}
+      Script: {instanceID: 3216}
     - Class: 114
-      Script: {instanceID: 3310}
+      Script: {instanceID: 3306}
     - Class: 114
-      Script: {instanceID: 3476}
+      Script: {instanceID: 3312}
     - Class: 114
-      Script: {instanceID: 3482}
+      Script: {instanceID: 3478}
     - Class: 114
-      Script: {instanceID: 3490}
+      Script: {instanceID: 3484}
     - Class: 114
-      Script: {instanceID: 3626}
+      Script: {instanceID: 3492}
     - Class: 114
-      Script: {instanceID: 3848}
+      Script: {instanceID: 3628}
     - Class: 114
-      Script: {instanceID: 4032}
+      Script: {instanceID: 3850}
     - Class: 114
-      Script: {instanceID: 4220}
+      Script: {instanceID: 4034}
     - Class: 114
-      Script: {instanceID: 4258}
+      Script: {instanceID: 4222}
     - Class: 114
-      Script: {instanceID: 4348}
+      Script: {instanceID: 4260}
     - Class: 114
-      Script: {instanceID: 4400}
+      Script: {instanceID: 4350}
     - Class: 114
-      Script: {instanceID: 4694}
+      Script: {instanceID: 4402}
     - Class: 114
-      Script: {instanceID: 4816}
+      Script: {instanceID: 4696}
     - Class: 114
-      Script: {instanceID: 4886}
+      Script: {instanceID: 4818}
     - Class: 114
-      Script: {instanceID: 4916}
+      Script: {instanceID: 4888}
     - Class: 114
-      Script: {instanceID: 5048}
+      Script: {instanceID: 4918}
     - Class: 114
-      Script: {instanceID: 5066}
+      Script: {instanceID: 5050}
     - Class: 114
-      Script: {instanceID: 5238}
+      Script: {instanceID: 5068}
     - Class: 114
-      Script: {instanceID: 5290}
+      Script: {instanceID: 5240}
     - Class: 114
-      Script: {instanceID: 5348}
+      Script: {instanceID: 5292}
     - Class: 114
-      Script: {instanceID: 5452}
+      Script: {instanceID: 5350}
     - Class: 114
       Script: {instanceID: 5454}
     - Class: 114
-      Script: {instanceID: 5668}
+      Script: {instanceID: 5456}
     - Class: 114
-      Script: {instanceID: 5860}
+      Script: {instanceID: 5670}
     - Class: 114
-      Script: {instanceID: 6020}
+      Script: {instanceID: 5862}
     - Class: 114
-      Script: {instanceID: 6062}
+      Script: {instanceID: 6022}
+    - Class: 114
+      Script: {instanceID: 6064}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -717,7 +720,7 @@ ScriptsOnlyBuild:
     className: SupportLogger
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+      Hash: 782c731714a4a9e26e5edc923380cb76
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DamagePopup

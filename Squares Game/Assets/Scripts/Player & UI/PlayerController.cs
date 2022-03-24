@@ -299,7 +299,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     void RPC_ShowDamage(float damage)
     {
         GameObject popupObj = Instantiate(damagePopupPrefab, damagePlane.transform);
-        //popupObj.GetComponent<DamagePopup>().SetDamage(damage);
+        popupObj.GetComponent<DamagePopup>().SetDamage(damage);
         Destroy(popupObj, 2f);
     }
 
