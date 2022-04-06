@@ -26,6 +26,8 @@ public class ProjectileInfo : MonoBehaviour
                 tempHP = collision.gameObject.GetComponent<PlayerController>().currentHealth -= damage; //TODO: create RPC check in PlayerController.cs TakeDamage() that verifies the player took damage, if not revert this local health update
                 if(tempHP <= 0)
                 {
+                    //collision.gameObject.GetComponent<Collider>().enabled = false;
+                    collision.gameObject.layer = LayerMask.NameToLayer("DeadPlayers");
                     collision.gameObject.tag = "DeadPlayer";
                 }
             }

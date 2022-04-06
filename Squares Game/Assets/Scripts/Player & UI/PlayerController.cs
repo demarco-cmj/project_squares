@@ -266,14 +266,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     public void TakeDamage(float targetHP, float damage, string killer) //when player is hit, shooter is led here and send damage to correct target
     {
-        // foreach(Player player in PhotonNetwork.PlayerList)
-        // {
-        //     if(player.PhotonView )
-        // }
-
         //Serve damage to correct player
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, killer); 
 
+        //Update info for other clients
         float fill = targetHP / maxHealth;        
         PV.RPC("RPC_UpdateHealthBar", RpcTarget.All, fill);
         PV.RPC("RPC_ShowDamage", RpcTarget.All, damage);
@@ -301,6 +297,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     void Die(string killer, bool suicide)
     {
         gameObject.tag = "DeadPlayer";
+        //gameObject.GetComponent<Collider>().enabled = false;
+        gameObject.layer = LayerMask.NameToLayer("DeadPlayers");
         playerManager.Die(killer, PV.Owner.NickName, suicide);
     }
 
