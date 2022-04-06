@@ -10,6 +10,8 @@ public class ProjectileGun : Gun
 {
     [SerializeField] Camera cam;
     PhotonView PV;
+    PhotonView playerPV;
+    public GameObject player;
 
     public bool reloading;
     public Transform muzzle;
@@ -21,6 +23,7 @@ public class ProjectileGun : Gun
     void Awake()
     {
         PV = GetComponent<PhotonView>();
+        playerPV = player.GetComponent<PhotonView>();
         timeBetweenShots = 60 / ((GunInfo)itemInfo).fireRate; //Measured in rounds/min
         lastShot = -1f;
         bulletsMax = bulletsLeft = ((GunInfo)itemInfo).magazineSize;
@@ -121,9 +124,9 @@ public class ProjectileGun : Gun
         //Set Bullet's local info
         currentBullet.GetComponent<ProjectileInfo>().damage = ((GunInfo)itemInfo).damage;
         currentBullet.GetComponent<ProjectileInfo>().owner = owner;
-        if(String.Equals(PV.Owner.NickName, owner))
+        if(PV.IsMine) //only the player shooting will have an active bullet
         {
-            Debug.Log("Setting isHot to Ture");
+            Debug.LogError("Setting isHot to Ture");
             currentBullet.GetComponent<ProjectileInfo>().isHot = true;
         }
 

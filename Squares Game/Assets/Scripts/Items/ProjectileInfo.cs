@@ -30,7 +30,7 @@ public class ProjectileInfo : MonoBehaviour
             //deal damage to player, despawn proj
             if(isHot)
             {
-                Debug.Log("Was hot");
+                //Debug.LogError("Was hot");
                 collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage, owner);
             }
             Destroy(current);

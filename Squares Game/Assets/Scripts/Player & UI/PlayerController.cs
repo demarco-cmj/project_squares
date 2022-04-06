@@ -267,11 +267,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     public void TakeDamage(float damage, string killer)
     {
         //Debug.Log("Dealt: " + damage);
-        float fillTemp = (currentHealth - damage) / maxHealth;
-
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, killer);
-        PV.RPC("RPC_UpdateHealthBar", RpcTarget.All, fillTemp);
-        PV.RPC("RPC_ShowDamage", RpcTarget.All, damage);
     }
 
     [PunRPC] //Finds correct target within PUN //RPC == Remote Procedure Call
@@ -283,8 +279,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         //Debug.Log("Took: " + damage);
 
         currentHealth -= damage;
+        float fillTemp = currentHealth / maxHealth;
 
         healthbarImg.fillAmount = currentHealth / maxHealth; //Modify health bar as a percentage
+
+        PV.RPC("RPC_UpdateHealthBar", RpcTarget.Others, fillTemp);
+        PV.RPC("RPC_ShowDamage", RpcTarget.Others, damage);
 
         if(currentHealth <= 0)
         {
@@ -302,12 +302,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     {
         GameObject popupObj = Instantiate(damagePopupPrefab, damageSpawns[Random.Range(0, damageSpawns.Length)].transform);
         popupObj.GetComponent<DamagePopup>().SetDamage(damage);
-        Destroy(popupObj, 2f);
+        Destroy(popupObj, 1f);
     }
 
     [PunRPC]
     void RPC_UpdateHealthBar(float fill) //needs parameters passed so remote clients dont use their own health vars
     {
+        Debug.LogError("player took damage: " + fill);
         healthbarImgWorld.fillAmount = fill;
     }
 

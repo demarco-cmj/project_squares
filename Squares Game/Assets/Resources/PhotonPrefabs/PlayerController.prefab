@@ -3217,6 +3217,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6596321949861292274}
     - target: {fileID: 4869974017972441122, guid: 1c90e8bc2bd5ca1428902d0fac76e68e, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 6078460349239661860}
+    - target: {fileID: 4869974017972441122, guid: 1c90e8bc2bd5ca1428902d0fac76e68e, type: 3}
       propertyPath: ammoText
       value: 
       objectReference: {fileID: 996681230970641611}
@@ -3305,6 +3309,10 @@ PrefabInstance:
       propertyPath: muzzle
       value: 
       objectReference: {fileID: 3555218043394435276}
+    - target: {fileID: 4869974017972441122, guid: ad0ddac69daf27047950f3c26319094d, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 6078460349239661860}
     - target: {fileID: 4869974017972441122, guid: ad0ddac69daf27047950f3c26319094d, type: 3}
       propertyPath: gunInfo
       value: 

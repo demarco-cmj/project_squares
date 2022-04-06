@@ -130,6 +130,7 @@ MonoBehaviour:
   bouncesLeft: 0
   owner: 
   current: {fileID: 3368005620101185373}
+  isHot: 0
 --- !u!114 &-1027564593638923925
 MonoBehaviour:
   m_ObjectHideFlags: 0
