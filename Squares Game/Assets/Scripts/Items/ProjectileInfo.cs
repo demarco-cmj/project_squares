@@ -24,6 +24,10 @@ public class ProjectileInfo : MonoBehaviour
             if(!collision.gameObject.GetComponent<PhotonView>().IsMine)
             {
                 tempHP = collision.gameObject.GetComponent<PlayerController>().currentHealth -= damage; //TODO: create RPC check in PlayerController.cs TakeDamage() that verifies the player took damage, if not revert this local health update
+                if(tempHP <= 0)
+                {
+                    collision.gameObject.tag = "DeadPlayer";
+                }
             }
 
             //if this bullet is on shooter's client, deal damage to player
