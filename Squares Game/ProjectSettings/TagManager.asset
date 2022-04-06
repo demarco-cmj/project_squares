@@ -6,6 +6,7 @@ TagManager:
   tags:
   - KillFeed
   - Scoreboard
+  - DeadPlayer
   layers:
   - Default
   - TransparentFX

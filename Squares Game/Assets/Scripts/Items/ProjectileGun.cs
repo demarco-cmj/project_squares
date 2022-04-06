@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using Photon.Pun;
 using Photon;
@@ -9,6 +10,8 @@ public class ProjectileGun : Gun
 {
     [SerializeField] Camera cam;
     PhotonView PV;
+    PhotonView playerPV;
+    //public GameObject player;
 
     public bool reloading;
     public Transform muzzle;
@@ -20,6 +23,7 @@ public class ProjectileGun : Gun
     void Awake()
     {
         PV = GetComponent<PhotonView>();
+        //playerPV = player.GetComponent<PhotonView>();
         timeBetweenShots = 60 / ((GunInfo)itemInfo).fireRate; //Measured in rounds/min
         lastShot = -1f;
         bulletsMax = bulletsLeft = ((GunInfo)itemInfo).magazineSize;
@@ -120,6 +124,10 @@ public class ProjectileGun : Gun
         //Set Bullet's local info
         currentBullet.GetComponent<ProjectileInfo>().damage = ((GunInfo)itemInfo).damage;
         currentBullet.GetComponent<ProjectileInfo>().owner = owner;
+        if(PV.IsMine) //only the player shooting will have an active bullet
+        {
+            currentBullet.GetComponent<ProjectileInfo>().isHot = true;
+        }
 
         //Add forces to bullet
         currentBullet.GetComponent<Rigidbody>().AddForce(direction.normalized * ((GunInfo)itemInfo).bulletVelocity, ForceMode.Impulse);

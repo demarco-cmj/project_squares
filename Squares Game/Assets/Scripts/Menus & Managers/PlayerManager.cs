@@ -38,9 +38,12 @@ public class PlayerManager : MonoBehaviour
 
     public void Die(string killer, string body, bool suicide)
     {
-        PhotonNetwork.Destroy(controller);
+        //PV.RPC("RPC_HideBody", RpcTarget.All, controller); //TODO: Not used
         TraceKill(killer, body, suicide);
-        CreateController();
+        StartCoroutine(DeleteBody(killer, body, suicide));
+        // PhotonNetwork.Destroy(controller);
+        // TraceKill(killer, body, suicide);
+        // CreateController();
     }
 
     void TraceKill(string killer, string body, bool suicide)
@@ -48,6 +51,21 @@ public class PlayerManager : MonoBehaviour
         //Debug.Log("New feed: " + killer +  " killed " + body);
         PV.RPC("RPC_TraceKill", RpcTarget.All, killer, body, suicide);
     }
+
+    IEnumerator DeleteBody(string killer, string body, bool suicide) //TODO: Not used
+    {
+        yield return new WaitForSeconds(3);
+        PhotonNetwork.Destroy(controller);
+        CreateController();
+    }
+
+    // [PunRPC]
+    // void RPC_HideBody(GameObject body) //TODO: Not used
+    // {
+    //     Renderer graphics = body.GetComponent<Renderer>();
+    //     graphics.enabled = false;
+    //     Debug.Log("Hid body");
+    // }
 
     [PunRPC]
     void RPC_TraceKill(string killer, string body, bool suicide)

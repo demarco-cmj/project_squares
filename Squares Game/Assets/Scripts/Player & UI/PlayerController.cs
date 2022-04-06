@@ -33,13 +33,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     //Health & UI
     const float maxHealth = 100f;
-    float currentHealth = maxHealth;
+    public float currentHealth = maxHealth;
     PlayerManager playerManager;
     [SerializeField] Image healthbarImg;
+    [SerializeField] Image healthbarImgWorld;
     [SerializeField] GameObject ui;
-    [SerializeField] Image topHPBar;
     [SerializeField] PhotonView worldUI;
     bool isPaused = false;
+
+    public GameObject damagePopupPrefab, damagePlane;
+    [SerializeField] GameObject[] damageSpawns;
 
     /************************* MODIFIABLE STATS *************************/
     
@@ -126,7 +129,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     {
         if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.AddForce(transform.up * jumpForce);
+            rb.AddForce(transform.up * (jumpForce * 50)); //multiply jump force by weight of player
         }
     }
 
@@ -261,10 +264,19 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     /************************* DAMAGE *************************/
 
-    public void TakeDamage(float damage, string killer)
+    public void TakeDamage(float targetHP, float damage, string killer) //when player is hit, shooter is led here and send damage to correct target
     {
-        //Debug.Log("Dealt: " + damage);
-        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, killer);
+        // foreach(Player player in PhotonNetwork.PlayerList)
+        // {
+        //     if(player.PhotonView )
+        // }
+
+        //Serve damage to correct player
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, killer); 
+
+        float fill = targetHP / maxHealth;        
+        PV.RPC("RPC_UpdateHealthBar", RpcTarget.All, fill);
+        PV.RPC("RPC_ShowDamage", RpcTarget.All, damage);
     }
 
     [PunRPC] //Finds correct target within PUN //RPC == Remote Procedure Call
@@ -276,9 +288,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         //Debug.Log("Took: " + damage);
 
         currentHealth -= damage;
+        
 
         healthbarImg.fillAmount = currentHealth / maxHealth; //Modify health bar as a percentage
-        topHPBar.fillAmount = currentHealth / maxHealth;
 
         if(currentHealth <= 0)
         {
@@ -288,7 +300,23 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     void Die(string killer, bool suicide)
     {
+        gameObject.tag = "DeadPlayer";
         playerManager.Die(killer, PV.Owner.NickName, suicide);
+    }
+
+    [PunRPC]
+    void RPC_ShowDamage(float damage)
+    {
+        GameObject popupObj = Instantiate(damagePopupPrefab, damageSpawns[Random.Range(0, damageSpawns.Length)].transform);
+        popupObj.GetComponent<DamagePopup>().SetDamage(damage);
+        Destroy(popupObj, 1f);
+    }
+
+    [PunRPC]
+    void RPC_UpdateHealthBar(float fill) //needs parameters passed so remote clients dont use their own health vars
+    {
+        //Debug.LogError("player took damage: " + fill);
+        healthbarImgWorld.fillAmount = fill;
     }
 
     /************************* MENUS *************************/

@@ -18,7 +18,7 @@ MonoBehaviour:
   fireRate: 1200
   cooldownSpeed: 5
   reloadTime: 2
-  bulletVelocity: 50
+  bulletVelocity: 6
   magazineSize: 20
   bulletsPerTap: 1
   isAutomatic: 1

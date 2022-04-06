@@ -28,20 +28,20 @@ public class Launcher : MonoBehaviourPunCallbacks
     void Start()
     {
         PhotonNetwork.ConnectUsingSettings(); //Connects to server using settings in package file generated with ID
-        Debug.Log("Connecting to Master");
+        //Debug.Log("Connecting to Master");
     }
 
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.JoinLobby();
-        Debug.Log("Connected to Master");
+        //Debug.Log("Connected to Master");
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     public override void OnJoinedLobby()
     {
         MenuManager.inst.OpenMenu("title");
-        Debug.Log("Joined Lobby");
+        //Debug.Log("Joined Lobby");
         //PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
     }
     

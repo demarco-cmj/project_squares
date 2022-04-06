@@ -26,7 +26,8 @@ public class RayGun : Gun
         if(Physics.Raycast(ray, out RaycastHit hit))
         {
             //Debug.Log("Hit: " + hit.collider.gameObject.name);
-            hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(((GunInfo)itemInfo).damage, PV.Owner.NickName);
+            float tempHP = hit.collider.gameObject.GetComponent<PlayerController>().currentHealth; //here
+            hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(tempHP, ((GunInfo)itemInfo).damage, PV.Owner.NickName);
             PV.RPC("RPC_Shoot", RpcTarget.All, hit.point, hit.normal);
         }
     }
