@@ -2178,6 +2178,7 @@ MonoBehaviour:
   items:
   - {fileID: 1202679302076846769}
   - {fileID: 7963804700900185919}
+  currentHealth: 100
   healthbarImg: {fileID: 6561686105781245423}
   healthbarImgWorld: {fileID: 4756522241839364585}
   ui: {fileID: 3535913265824689239}

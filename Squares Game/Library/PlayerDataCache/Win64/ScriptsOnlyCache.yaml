@@ -586,7 +586,7 @@ ScriptsOnlyBuild:
     className: CanvasScaler
   - hash:
       serializedVersion: 2
-      Hash: 2f7a1eed5944550070423ea6ac574f34
+      Hash: 9321596430fa534f9577e0dadba5d480
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ProjectileGun
@@ -880,7 +880,7 @@ ScriptsOnlyBuild:
     className: TMP_FrameRateCounter
   - hash:
       serializedVersion: 2
-      Hash: c4453c428cee7a8af4c53bdc884103c7
+      Hash: c5486ab93379ebd13b869b4f591c7687
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController

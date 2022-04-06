@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     //Health & UI
     const float maxHealth = 100f;
-    float currentHealth = maxHealth;
+    public float currentHealth = maxHealth;
     PlayerManager playerManager;
     [SerializeField] Image healthbarImg;
     [SerializeField] Image healthbarImgWorld;
@@ -264,10 +264,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     /************************* DAMAGE *************************/
 
-    public void TakeDamage(float damage, string killer)
+    public void TakeDamage(float targetHP, float damage, string killer) //when player is hit, shooter is led here and send damage to correct target
     {
-        //Debug.Log("Dealt: " + damage);
-        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, killer);
+        //Serve damage to correct player
+        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, killer); 
+
+        float fill = targetHP / maxHealth;        
+        PV.RPC("RPC_UpdateHealthBar", RpcTarget.All, fill);
+        PV.RPC("RPC_ShowDamage", RpcTarget.All, damage);
     }
 
     [PunRPC] //Finds correct target within PUN //RPC == Remote Procedure Call
@@ -279,12 +283,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         //Debug.Log("Took: " + damage);
 
         currentHealth -= damage;
-        float fillTemp = currentHealth / maxHealth;
+        
 
         healthbarImg.fillAmount = currentHealth / maxHealth; //Modify health bar as a percentage
-
-        PV.RPC("RPC_UpdateHealthBar", RpcTarget.Others, fillTemp);
-        PV.RPC("RPC_ShowDamage", RpcTarget.Others, damage);
 
         if(currentHealth <= 0)
         {
@@ -308,7 +309,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [PunRPC]
     void RPC_UpdateHealthBar(float fill) //needs parameters passed so remote clients dont use their own health vars
     {
-        Debug.LogError("player took damage: " + fill);
+        //Debug.LogError("player took damage: " + fill);
         healthbarImgWorld.fillAmount = fill;
     }
 
