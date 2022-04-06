@@ -267,8 +267,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     public void TakeDamage(float damage, string killer)
     {
         //Debug.Log("Dealt: " + damage);
+        float fillTemp = (currentHealth - damage) / maxHealth;
+
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, killer);
-        PV.RPC("RPC_UpdateHealthBar", RpcTarget.All, currentHealth, damage, maxHealth);
+        PV.RPC("RPC_UpdateHealthBar", RpcTarget.All, fillTemp);
         PV.RPC("RPC_ShowDamage", RpcTarget.All, damage);
     }
 
@@ -304,9 +306,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     }
 
     [PunRPC]
-    void RPC_UpdateHealthBar(float curHP, float dam, float maxHP) //needs parameters passed so remote clients dont use their own health vars
+    void RPC_UpdateHealthBar(float fill) //needs parameters passed so remote clients dont use their own health vars
     {
-        healthbarImgWorld.fillAmount = (curHP - dam) / maxHP;
+        healthbarImgWorld.fillAmount = fill;
     }
 
     /************************* MENUS *************************/

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using Photon.Pun;
 using Photon;
@@ -120,6 +121,11 @@ public class ProjectileGun : Gun
         //Set Bullet's local info
         currentBullet.GetComponent<ProjectileInfo>().damage = ((GunInfo)itemInfo).damage;
         currentBullet.GetComponent<ProjectileInfo>().owner = owner;
+        if(String.Equals(PV.Owner.NickName, owner))
+        {
+            Debug.Log("Setting isHot to Ture");
+            currentBullet.GetComponent<ProjectileInfo>().isHot = true;
+        }
 
         //Add forces to bullet
         currentBullet.GetComponent<Rigidbody>().AddForce(direction.normalized * ((GunInfo)itemInfo).bulletVelocity, ForceMode.Impulse);

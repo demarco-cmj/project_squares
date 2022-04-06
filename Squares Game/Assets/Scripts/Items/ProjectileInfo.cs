@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon;
 
 //[CreateAssetMenu(menuName = "FPS/New Projectile")]
 public class ProjectileInfo : MonoBehaviour
@@ -12,13 +14,28 @@ public class ProjectileInfo : MonoBehaviour
     Rigidbody rb;
     Vector3 location;
 
+    public bool isHot;
+    //PhotonView PV;
+
+    // void Awake()
+    // {
+    //     PV = GetComponent<PhotonView>();
+    // }
+
     void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag == "Player")
         {
+            Debug.Log("Hit player");
             //deal damage to player, despawn proj
-            collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage, owner);
+            if(isHot)
+            {
+                Debug.Log("Was hot");
+                collision.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage, owner);
+            }
             Destroy(current);
+            //PV.RPC("RPC_DeleteBullet", RpcTarget.All);                                      //TODO: better performance to build a bullet manager for handling all projectiles?
+            //PhotonNetwork.Destroy(current);
         }
         else
         {
@@ -27,6 +44,12 @@ public class ProjectileInfo : MonoBehaviour
 
 
     }
+
+    // [PunRPC]
+    // void RPC_DeleteBullet()
+    // {
+    //         Destroy(current);
+    // }
 
     void Start()
     {

@@ -24,6 +24,8 @@ ScriptsOnlyBuild:
     - SpawnManager
     - Spawnpoint
     - UsernameDisplay
+    PhotonUnityNetworking.Editor.dll:
+    - Photon.Pun.PunSceneSettings
     PhotonUnityNetworking.dll:
     - Photon.Pun.PhotonTransformView
     - Photon.Pun.PhotonView
@@ -54,8 +56,6 @@ ScriptsOnlyBuild:
     - TMPro.TMP_SpriteAsset
     - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
-    Unity.Timeline.Editor.dll:
-    - TimelineProjectSettings
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
@@ -103,7 +103,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1582}
     - Class: 114
-      Script: {instanceID: 1982}
+      Script: {instanceID: 1980}
     - Class: 114
       Script: {instanceID: 2654}
     - Class: 114
@@ -196,11 +196,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1582}
     - Class: 114
-      Script: {instanceID: 1696}
+      Script: {instanceID: 1694}
     - Class: 114
-      Script: {instanceID: 1812}
+      Script: {instanceID: 1810}
     - Class: 114
-      Script: {instanceID: 1982}
+      Script: {instanceID: 1980}
     - Class: 114
       Script: {instanceID: 2384}
     - Class: 114
@@ -454,6 +454,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Postprocessing.Runtime.dll
     namespaceName: UnityEngine.Rendering.PostProcessing
     className: DepthOfField
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ProjectileManager
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -726,7 +732,7 @@ ScriptsOnlyBuild:
     className: DamagePopup
   - hash:
       serializedVersion: 2
-      Hash: 6ab028127b4a1b087644455f9aea2f85
+      Hash: 11d0676ef2406117f68110757d7d90a9
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ProjectileInfo
