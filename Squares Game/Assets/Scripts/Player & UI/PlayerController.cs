@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     //Fields
     [SerializeField] float mouseSens, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     [SerializeField] GameObject camHolder;
+    [SerializeField] GameObject groundCheck;
     [SerializeField] Camera cam;
     
 
@@ -26,6 +27,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     bool isGrounded;
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;
+    //Vector3 slopeNormalMove;
+    RaycastHit slopeHit;
 
     //Client Sync
     Rigidbody rb;
@@ -121,8 +124,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     void Move()
     {
         Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
-
-        moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed), ref smoothMoveVelocity, smoothTime); //use sprint speed if holding shift, walk if not
+        
+        if(OnSlope())
+        {
+            Vector3 slopeNormalMove = Vector3.ProjectOnPlane(moveDir, slopeHit.normal);
+            moveAmount = Vector3.SmoothDamp(moveAmount, slopeNormalMove * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed), ref smoothMoveVelocity, smoothTime);
+        }
+        else
+        {
+             moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed), ref smoothMoveVelocity, smoothTime); //use sprint speed if holding shift, walk if not
+        }
     }
 
     void Jump()
@@ -145,6 +156,21 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     public void SetIsGrounded(bool grounded)
     {
         isGrounded = grounded;
+    }
+
+    bool OnSlope()
+    {
+        if(Physics.Raycast(groundCheck.transform.position, Vector3.down, out slopeHit, 0.25f))
+        {
+            if(slopeHit.normal != Vector3.up)
+            {
+                Debug.Log("onSlope = TRUE");
+                return true;
+            }
+            Debug.Log("ray hitting");
+        }
+        Debug.Log("onSlope = FALSE");
+        return false;
     }
 
     void FixedUpdate()      //TODO: Smooth player movement between FixedUpdate
