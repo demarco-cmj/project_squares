@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     {
         Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
         
-        if(OnSlope())
+        if(OnSlope()) //if on a slope
         {
             Vector3 slopeNormalMove = Vector3.ProjectOnPlane(moveDir, slopeHit.normal);
             moveAmount = Vector3.SmoothDamp(moveAmount, slopeNormalMove * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed), ref smoothMoveVelocity, smoothTime);
@@ -160,14 +160,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     bool OnSlope()
     {
-        if(Physics.Raycast(groundCheck.transform.position, Vector3.down, out slopeHit, 0.25f))
+        if(Physics.Raycast(groundCheck.transform.position, Vector3.down, out slopeHit, 0.5f))
         {
             if(slopeHit.normal != Vector3.up)
             {
                 Debug.Log("onSlope = TRUE");
                 return true;
             }
-            Debug.Log("ray hitting");
         }
         Debug.Log("onSlope = FALSE");
         return false;
@@ -178,6 +177,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(!PV.IsMine)
             return;
         
+        //Debug.Log("dir: " + moveAmount);
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
     }
 

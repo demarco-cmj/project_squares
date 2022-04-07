@@ -17,6 +17,7 @@ ScriptsOnlyBuild:
     - PlayerNameManager
     - ProjectileGun
     - ProjectileInfo
+    - RigidbodySync
     - RoomListItem
     - RoomManager
     - Scoreboard
@@ -146,6 +147,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 6022}
     - Class: 114
       Script: {instanceID: 6064}
+    - Class: 114
+      Script: {instanceID: 36690}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -295,6 +298,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 6022}
     - Class: 114
       Script: {instanceID: 6064}
+    - Class: 114
+      Script: {instanceID: 36690}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -886,7 +891,7 @@ ScriptsOnlyBuild:
     className: TMP_FrameRateCounter
   - hash:
       serializedVersion: 2
-      Hash: c5486ab93379ebd13b869b4f591c7687
+      Hash: 0f3b5473dda5b7800afcd5b2e2285f56
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -1496,6 +1501,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Postprocessing.Runtime.dll
     namespaceName: UnityEngine.Rendering.PostProcessing
     className: AmbientOcclusion
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: RigidbodySync
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

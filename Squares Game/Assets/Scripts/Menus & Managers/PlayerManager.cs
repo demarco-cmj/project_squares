@@ -54,7 +54,10 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator DeleteBody(string killer, string body, bool suicide) //TODO: Not used
     {
-        yield return new WaitForSeconds(3);
+        if(!suicide)
+        {
+            yield return new WaitForSeconds(3);
+        }
         PhotonNetwork.Destroy(controller);
         CreateController();
     }
