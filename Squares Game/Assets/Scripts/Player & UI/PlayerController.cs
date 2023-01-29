@@ -30,6 +30,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     //Vector3 slopeNormalMove;
     RaycastHit slopeHit;
 
+    //Grapple
+    private LineRenderer lr;
+    private Vector3 grapplePoint;
+    private Vector3 currentGrapplePosition;
+    public LayerMask isGrapplable;
+    public Transform grappleSpawn, playerCam;
+    private float maxDistance = 25f;
+    private SpringJoint joint;
+
     //Client Sync
     Rigidbody rb;
     PhotonView PV;
@@ -67,6 +76,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         PV = GetComponent<PhotonView>();
 
         playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
+
+        lr = GetComponent<LineRenderer>();
     }
 
     void Start()
@@ -100,6 +111,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             MouseLook();
             Move();
             Jump();
+            Grapple();
             UpdateItem();
             UseItem(); //where gun stats need to be fed
         }
@@ -107,6 +119,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         Pause();
         CheckInBounds();
 
+    }
+
+    void LateUpdate()
+    {
+        DrawRope();
     }
 
 
@@ -351,5 +368,62 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         {
             isPaused = !isPaused;
         }
+    }
+
+
+    /************************* GRAPPLE *************************/
+    void Grapple() {
+        if (Input.GetKeyDown(KeyCode.Q)) {
+            Debug.Log("player pressed Q");
+            startGrapple();
+        } else if (Input.GetKeyUp(KeyCode.Q)) {
+            stopGrapple();
+        }
+    }
+
+    void startGrapple() {
+        RaycastHit hit;
+        if (Physics.Raycast(origin: rb.position, direction: playerCam.forward, out hit, maxDistance)) {
+
+            grapplePoint = hit.point;
+            joint = rb.gameObject.AddComponent<SpringJoint>();
+            joint.autoConfigureConnectedAnchor = false;
+            joint.connectedAnchor = grapplePoint;
+
+            float distanceFromPoint = Vector3.Distance(rb.position, grapplePoint);
+
+            joint.maxDistance = distanceFromPoint * 0.4f;
+            joint.minDistance = distanceFromPoint * 0.3f;
+
+            joint.spring = 50f;
+            joint.damper = 10f;
+            joint.massScale = 4.5f;
+
+            lr.positionCount = 2;
+            currentGrapplePosition = grappleSpawn.position;
+        }
+    }
+
+    void stopGrapple() {
+        lr.positionCount = 0;
+        Destroy(joint);
+    }
+
+    void DrawRope() {
+        //If not grappling, don't draw rope
+        if (!joint) return;
+
+        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 8f);
+        
+        lr.SetPosition(0, grappleSpawn.position);
+        lr.SetPosition(1, currentGrapplePosition);
+    }
+
+    public bool IsGrappling() {
+        return joint != null;
+    }
+
+    public Vector3 GetGrapplePoint() {
+        return grapplePoint;
     }
 }
