@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     private bool isGrappling = false;
     private Vector3 gx, gy;
 
+    private Dictionary < int, Vector3 > playersGrappling = new Dictionary<int, Vector3>();
+
     //Client Sync
     Rigidbody rb;
     PhotonView PV;
@@ -125,7 +127,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     void LateUpdate()
     {
-        DrawRope();
+        DrawRopeLocal();
+        DrawAllRopes();
+        
     }
 
 
@@ -183,11 +187,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         {
             if(slopeHit.normal != Vector3.up)
             {
-                Debug.Log("onSlope = TRUE");
+                // Debug.Log("onSlope = TRUE");
                 return true;
             }
         }
-        Debug.Log("onSlope = FALSE");
+        // Debug.Log("onSlope = FALSE");
         return false;
     }
 
@@ -376,10 +380,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     /************************* GRAPPLE *************************/
     void Grapple() {
         if (Input.GetKeyDown(KeyCode.Q)) {
-            Debug.Log("player pressed Q");
-            (gx, gy) = startGrapple();
-            if (gx != gy) {
-                isGrappling = true;
+            isGrappling = startGrapple();
+            if (isGrappling) {
+                PV.RPC("toggleEnemyGrappleON", RpcTarget.Others, PV.ViewID, grapplePoint);
                 
             }
         } 
@@ -387,16 +390,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             stopGrapple();
             if (isGrappling) {
                 isGrappling = false;
-                PV.RPC("reduceLRPos", RpcTarget.Others);
+                PV.RPC("toggleEnemyGrappleOFF", RpcTarget.Others, PV.ViewID);
             }
-        }
-
-        if (isGrappling) {
-            PV.RPC("DrawOtherRope", RpcTarget.Others, gx, gy ); 
         }
     }
 
-    (Vector3, Vector3) startGrapple() {
+    //local player calculation
+    bool startGrapple() {
         RaycastHit hit;
         if (Physics.Raycast(origin: rb.position, direction: playerCam.forward, out hit, maxDistance)) {
 
@@ -417,9 +417,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             lr.positionCount = 2;
             currentGrapplePosition = grappleSpawn.position;
 
-            return (currentGrapplePosition, grapplePoint);
+            return true;
         }
-        return (currentGrapplePosition, currentGrapplePosition); //return the same pos, check for length
+        return false; //if the same pos, not grappling
     }
 
     void stopGrapple() {
@@ -427,40 +427,47 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         Destroy(joint);
     }
 
-    void DrawRope() {
+    void DrawRopeLocal() {
         // If not grappling, don't draw rope
         if (!joint) return;
 
-        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 8f);
+        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 8f); //adds "animation"
         
         lr.SetPosition(0, grappleSpawn.position);
         lr.SetPosition(1, currentGrapplePosition);
-
-        gx = grappleSpawn.position;
-        gy = currentGrapplePosition;
     }
 
     public bool IsGrappling() {
         return joint != null;
     }
 
-    public Vector3 GetGrapplePoint() {
-        return grapplePoint;
-    }
-
-    [PunRPC]
-    void DrawOtherRope(Vector3 x, Vector3 y) {
-        Vector3 tempGrapplePosition = Vector3.Lerp(x, y, Time.deltaTime * 8f);
-
-        lr.positionCount = 2;
-        // otherLR.SetPosition(0, a);
-        // otherLR.SetPosition(1, tempGrapplePosition);
-        lr.SetPositions( new Vector3[] { x, y });
+    // [PunRPC]
+    // void Test(int id, Vector3 grapplePoint) {
+    //     Debug.Log(PhotonView.Find(id).Owner.NickName + " is grappling \n " + "ID: " + id);
         
+    // }
+
+
+    [PunRPC]
+    void toggleEnemyGrappleON(int id, Vector3 grapplePoint) {
+        Debug.Log(PhotonView.Find(id).Owner.NickName + "ON");
+        playersGrappling.Add(id, grapplePoint);  
     }
 
     [PunRPC]
-    void reduceLRPos() {
-        lr.positionCount = 0;
+    void toggleEnemyGrappleOFF(int id) {
+        Debug.Log(PhotonView.Find(id).Owner.NickName + "OFF");
+        //Debug.Log(PhotonView.Find(id).Owner.NickName + " is grappling \n " + "ID: " + id);
+       
+        PhotonView.Find(id).gameObject.GetComponent<LineRenderer>().positionCount = 0;
+        playersGrappling.Remove(id);
+    }
+
+    void DrawAllRopes() {
+        foreach (KeyValuePair<int, Vector3> entry in playersGrappling) {
+            Debug.Log(PhotonView.Find(entry.Key).Owner.NickName + " is grappling \n " + "ID: " + entry.Key + "Pos: " + entry.Value);
+            PhotonView.Find(entry.Key).gameObject.GetComponent<LineRenderer>().positionCount = 2;
+            PhotonView.Find(entry.Key).gameObject.GetComponent<LineRenderer>().SetPositions(new Vector3[]{PhotonView.Find(entry.Key).gameObject.transform.position, entry.Value});
+        }
     }
 }

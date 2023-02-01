@@ -52,6 +52,10 @@ MonoBehaviour:
   - drawGrappleRPC
   - DrawOtherRope
   - reduceLRPos
+  - Test
+  - toggleEnemyGrapple
+  - toggleEnemyGrappleOFF
+  - toggleEnemyGrappleON
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0
