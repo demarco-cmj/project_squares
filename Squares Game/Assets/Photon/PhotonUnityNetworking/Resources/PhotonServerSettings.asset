@@ -47,6 +47,11 @@ MonoBehaviour:
   - RPC_UpdateHealthBar
   - RPC_HideBody
   - RPC_DeleteBullet
+  - DrawRope
+  - DrawEnemyRope
+  - drawGrappleRPC
+  - DrawOtherRope
+  - reduceLRPos
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0

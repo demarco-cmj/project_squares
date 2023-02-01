@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     public Transform grappleSpawn, playerCam;
     private float maxDistance = 25f;
     private SpringJoint joint;
+    private bool isGrappling = false;
+    private Vector3 gx, gy;
 
     //Client Sync
     Rigidbody rb;
@@ -375,13 +377,26 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     void Grapple() {
         if (Input.GetKeyDown(KeyCode.Q)) {
             Debug.Log("player pressed Q");
-            startGrapple();
-        } else if (Input.GetKeyUp(KeyCode.Q)) {
+            (gx, gy) = startGrapple();
+            if (gx != gy) {
+                isGrappling = true;
+                
+            }
+        } 
+        else if (Input.GetKeyUp(KeyCode.Q)) {
             stopGrapple();
+            if (isGrappling) {
+                isGrappling = false;
+                PV.RPC("reduceLRPos", RpcTarget.Others);
+            }
+        }
+
+        if (isGrappling) {
+            PV.RPC("DrawOtherRope", RpcTarget.Others, gx, gy ); 
         }
     }
 
-    void startGrapple() {
+    (Vector3, Vector3) startGrapple() {
         RaycastHit hit;
         if (Physics.Raycast(origin: rb.position, direction: playerCam.forward, out hit, maxDistance)) {
 
@@ -401,7 +416,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
             lr.positionCount = 2;
             currentGrapplePosition = grappleSpawn.position;
+
+            return (currentGrapplePosition, grapplePoint);
         }
+        return (currentGrapplePosition, currentGrapplePosition); //return the same pos, check for length
     }
 
     void stopGrapple() {
@@ -410,13 +428,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     }
 
     void DrawRope() {
-        //If not grappling, don't draw rope
+        // If not grappling, don't draw rope
         if (!joint) return;
 
         currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 8f);
         
         lr.SetPosition(0, grappleSpawn.position);
         lr.SetPosition(1, currentGrapplePosition);
+
+        gx = grappleSpawn.position;
+        gy = currentGrapplePosition;
     }
 
     public bool IsGrappling() {
@@ -425,5 +446,21 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     public Vector3 GetGrapplePoint() {
         return grapplePoint;
+    }
+
+    [PunRPC]
+    void DrawOtherRope(Vector3 x, Vector3 y) {
+        Vector3 tempGrapplePosition = Vector3.Lerp(x, y, Time.deltaTime * 8f);
+
+        lr.positionCount = 2;
+        // otherLR.SetPosition(0, a);
+        // otherLR.SetPosition(1, tempGrapplePosition);
+        lr.SetPositions( new Vector3[] { x, y });
+        
+    }
+
+    [PunRPC]
+    void reduceLRPos() {
+        lr.positionCount = 0;
     }
 }
