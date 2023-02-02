@@ -5,6 +5,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon;
 using TMPro;
+using UnityEngine.UI;
 
 public class ProjectileGun : Gun
 {
@@ -20,6 +21,11 @@ public class ProjectileGun : Gun
     public TMP_Text ammoText;
     int bulletsLeft, bulletsMax;
 
+    //Relaod Icon
+    public Image reloadIcon;
+    float currentFillValue;
+    Vector3 rotationEuler = Vector3.zero;
+
     void Awake()
     {
         PV = GetComponent<PhotonView>();
@@ -28,6 +34,12 @@ public class ProjectileGun : Gun
         lastShot = -1f;
         bulletsMax = bulletsLeft = ((GunInfo)itemInfo).magazineSize;
         SetAmmoText();        
+    }
+
+    void Update () {
+        if(reloading) {
+            StartReloadIconAnimation();
+        }
     }
 
     public override void Use(Vector3 tp)
@@ -85,6 +97,7 @@ public class ProjectileGun : Gun
     {
         bulletsLeft = ((GunInfo)itemInfo).magazineSize;
         SetAmmoText();
+        EndReloadIconAnimation();
         reloading = false;
         //Debug.Log("Reloading done");
     }
@@ -105,6 +118,7 @@ public class ProjectileGun : Gun
     public override void CancelUpdate()
     {
         //Debug.Log("Reloading canceled");
+        EndReloadIconAnimation();
         CancelInvoke("CompleteReload");
         reloading = false;
     }
@@ -136,5 +150,26 @@ public class ProjectileGun : Gun
         //Destroy bullet after time
         Destroy(currentBullet, 20f);
 
+    }
+
+    /************* RELOAD ICON ***************/
+
+    void StartReloadIconAnimation() {
+        reloadIcon.gameObject.SetActive(true);
+        // if (currentFillValue < 100) {
+		// 	currentFillValue +=  40f * Time.deltaTime; //TODO: GET GUN reload speed here
+		// } else {
+		// 	LoadingBar.gameObject.SetActive(false);
+		// }
+ 
+		// LoadingBar.fillAmount = currentFillValue / 100;
+
+        rotationEuler -= Vector3.forward*180*Time.deltaTime; //increment 30 degrees every second
+        reloadIcon.gameObject.transform.rotation = Quaternion.Euler(rotationEuler);
+    }
+
+    void EndReloadIconAnimation() {
+        rotationEuler = Vector3.zero;
+        reloadIcon.gameObject.SetActive(false);
     }
 }

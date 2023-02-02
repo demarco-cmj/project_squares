@@ -245,7 +245,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     void UpdateItem()
     {
-         //Gun Item Swapping
+        //Gun Item Swapping
         for(int i = 0; i < items.Length; i++)
         {
             if(Input.GetKeyDown((i + 1).ToString()))
@@ -450,13 +450,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     [PunRPC]
     void toggleEnemyGrappleON(int id, Vector3 grapplePoint) {
-        Debug.Log(PhotonView.Find(id).Owner.NickName + "ON");
+        // Debug.Log(PhotonView.Find(id).Owner.NickName + "ON");
         playersGrappling.Add(id, grapplePoint);  
     }
 
     [PunRPC]
     void toggleEnemyGrappleOFF(int id) {
-        Debug.Log(PhotonView.Find(id).Owner.NickName + "OFF");
+        // Debug.Log(PhotonView.Find(id).Owner.NickName + "OFF");
         //Debug.Log(PhotonView.Find(id).Owner.NickName + " is grappling \n " + "ID: " + id);
        
         PhotonView.Find(id).gameObject.GetComponent<LineRenderer>().positionCount = 0;
@@ -465,7 +465,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     void DrawAllRopes() {
         foreach (KeyValuePair<int, Vector3> entry in playersGrappling) {
-            Debug.Log(PhotonView.Find(entry.Key).Owner.NickName + " is grappling \n " + "ID: " + entry.Key + "Pos: " + entry.Value);
+            // Debug.Log(PhotonView.Find(entry.Key).Owner.NickName + " is grappling \n " + "ID: " + entry.Key + "Pos: " + entry.Value);
             PhotonView.Find(entry.Key).gameObject.GetComponent<LineRenderer>().positionCount = 2;
             PhotonView.Find(entry.Key).gameObject.GetComponent<LineRenderer>().SetPositions(new Vector3[]{PhotonView.Find(entry.Key).gameObject.transform.position, entry.Value});
         }
