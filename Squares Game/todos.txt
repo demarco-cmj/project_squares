@@ -1,0 +1,2 @@
+- Check if player controller is already deleted before deleting on despawn
+- reload icon null refrence when swapping guns in multiplayer

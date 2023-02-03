@@ -65,8 +65,19 @@ public class ProjectileGun : Gun
 
     void Shoot(Vector3 tp)
     {
-        if(!reloading && bulletsLeft > 0)
+        if(!reloading && bulletsLeft > 0) //shoot
         {
+            bulletsLeft--;
+            lastShot = Time.time;
+            SetAmmoText();
+            if(bulletsLeft == 0)
+                {
+                    Reload();
+                }
+            PV.RPC("RPC_Shoot", RpcTarget.All, tp, PV.Owner.NickName);
+        }
+        else if (reloading && bulletsLeft > 0) { //cancel reload to shoot
+            CancelUpdate();
             bulletsLeft--;
             lastShot = Time.time;
             SetAmmoText();
@@ -170,6 +181,8 @@ public class ProjectileGun : Gun
 
     void EndReloadIconAnimation() {
         rotationEuler = Vector3.zero;
-        reloadIcon.gameObject.SetActive(false);
+        if (reloadIcon.gameObject != null) {
+            reloadIcon.gameObject.SetActive(false);
+        }
     }
 }
