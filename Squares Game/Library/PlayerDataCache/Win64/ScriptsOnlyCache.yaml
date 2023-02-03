@@ -3,6 +3,7 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - Billboard
     - DamagePopup
+    - GrappleGun
     - GunInfo
     - KillFeed
     - KillFeedItem
@@ -323,6 +324,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 246716}
     - Class: 114
       Script: {instanceID: 302800}
+    - Class: 114
+      Script: {instanceID: 328732}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 120
@@ -916,7 +919,7 @@ ScriptsOnlyBuild:
     className: TMP_FrameRateCounter
   - hash:
       serializedVersion: 2
-      Hash: 7f146423c5ca3abf40df5d03ee33532e
+      Hash: dd79e5bdae25c8d47208014f50139942
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -1534,12 +1537,6 @@ ScriptsOnlyBuild:
     className: AmbientOcclusion
   - hash:
       serializedVersion: 2
-      Hash: 71b4229b51726e6c104e545b3e9fbb4a
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: GrappleGun
-  - hash:
-      serializedVersion: 2
       Hash: 01d8ae6e6be10e30b01d272b4948c377
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
@@ -1550,6 +1547,12 @@ ScriptsOnlyBuild:
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: sway
+  - hash:
+      serializedVersion: 2
+      Hash: 4745304321690f3b4872de91f17744e7
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: GrappleGun
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

@@ -5,6 +5,9 @@ using Photon.Pun;
 
 public class GrappleGun : MonoBehaviour
 {
+    public Rigidbody rb;
+    public PhotonView PV;
+
     private LineRenderer lr;
     private Vector3 grapplePoint;
     private Vector3 currentGrapplePosition;
@@ -17,11 +20,17 @@ public class GrappleGun : MonoBehaviour
 
     private Dictionary < int, Vector3 > playersGrappling = new Dictionary<int, Vector3>();
 
+    void Awake() {
+        rb = GetComponent<Rigidbody>();
+        PV = GetComponent<PhotonView>();
+        lr = GetComponent<LineRenderer>();
+    }
+
     public void Grapple() {
         if (Input.GetKeyDown(KeyCode.Q)) {
             isGrappling = startGrapple();
             if (isGrappling) {
-                PlayerController.PV.RPC("toggleEnemyGrappleON", RpcTarget.Others, PlayerController.PV.ViewID, grapplePoint);
+                PV.RPC("toggleEnemyGrappleON", RpcTarget.Others, PV.ViewID, grapplePoint);
                 
             }
         } 
@@ -29,7 +38,7 @@ public class GrappleGun : MonoBehaviour
             stopGrapple();
             if (isGrappling) {
                 isGrappling = false;
-                PlayerController.PV.RPC("toggleEnemyGrappleOFF", RpcTarget.Others, PlayerController.PV.ViewID);
+                PV.RPC("toggleEnemyGrappleOFF", RpcTarget.Others, PV.ViewID);
             }
         }
     }
@@ -66,7 +75,7 @@ public class GrappleGun : MonoBehaviour
         Destroy(joint);
     }
 
-    void DrawRopeLocal() {
+    public void DrawRopeLocal() {
         // If not grappling, don't draw rope
         if (!joint) return;
 
@@ -102,7 +111,7 @@ public class GrappleGun : MonoBehaviour
         playersGrappling.Remove(id);
     }
 
-    void DrawAllRopes() {
+    public void DrawAllRopes() {
         foreach (KeyValuePair<int, Vector3> entry in playersGrappling) {
             // Debug.Log(PhotonView.Find(entry.Key).Owner.NickName + " is grappling \n " + "ID: " + entry.Key + "Pos: " + entry.Value);
             PhotonView.Find(entry.Key).gameObject.GetComponent<LineRenderer>().positionCount = 2;
