@@ -127,6 +127,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     {
         gg.DrawRopeLocal();
         gg.DrawAllRopes();
+        weaponAnimation.SetBool("isJumping", false);
+        weaponAnimation.SetBool("isSprintJumping", false);
         
     }
 
@@ -192,6 +194,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(transform.up * (jumpForce * 50)); //multiply jump force by weight of player
+            if (weaponAnimation.GetBool("isSprinting")) {
+                weaponAnimation.SetBool("isSprintJumping", true);
+            } else {
+                weaponAnimation.SetBool("isJumping", true);
+            }
         }
     }
 
@@ -325,7 +332,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         //Using items in hand
         if(Input.GetMouseButton(0))  //now sends over at rapid fire
         {
-            weaponAnimation.SetBool("isShooting", true);
             // Debug.Log("IS shooting");
             items[itemIndex].Use(Aim());
         }
@@ -333,7 +339,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         {
             items[itemIndex].Reload();
         }
-        weaponAnimation.SetBool("isShooting", false);
+
+        if(Input.GetMouseButtonUp(0)) {
+            weaponAnimation.SetBool("isShooting", false);
+        }
     }
 
     Vector3 Aim()

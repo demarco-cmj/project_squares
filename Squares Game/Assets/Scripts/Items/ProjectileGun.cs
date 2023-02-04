@@ -11,8 +11,6 @@ public class ProjectileGun : Gun
 {
     [SerializeField] Camera cam;
     PhotonView PV;
-    PhotonView playerPV;
-    //public GameObject player;
 
     public bool reloading;
     public Transform muzzle;
@@ -25,11 +23,14 @@ public class ProjectileGun : Gun
     public Image reloadIcon;
     float currentFillValue;
     Vector3 rotationEuler = Vector3.zero;
+    
+    //Animation
+    public Animator weaponAnimation;
 
     void Awake()
     {
         PV = GetComponent<PhotonView>();
-        //playerPV = player.GetComponent<PhotonView>();
+        weaponAnimation = GetComponentInParent<Animator>();
         timeBetweenShots = 60 / ((GunInfo)itemInfo).fireRate; //Measured in rounds/min
         lastShot = -1f;
         bulletsMax = bulletsLeft = ((GunInfo)itemInfo).magazineSize;
@@ -47,7 +48,6 @@ public class ProjectileGun : Gun
         if(Time.time >= lastShot + timeBetweenShots)
         {
             //Debug.Log("Using: " + itemInfo.itemName);
-
             //shoot according to fire mode
             if (((GunInfo)itemInfo).isAutomatic)
             {
@@ -67,11 +67,16 @@ public class ProjectileGun : Gun
     {
         if(!reloading && bulletsLeft > 0) //shoot
         {
+            weaponAnimation.SetBool("isShooting", true);
+            weaponAnimation.SetBool("isWalking", false);
+            weaponAnimation.SetBool("isIdle", false);
+
             bulletsLeft--;
             lastShot = Time.time;
             SetAmmoText();
             if(bulletsLeft == 0)
                 {
+                    weaponAnimation.SetBool("isShooting", false);
                     Reload();
                 }
             PV.RPC("RPC_Shoot", RpcTarget.All, tp, PV.Owner.NickName);
