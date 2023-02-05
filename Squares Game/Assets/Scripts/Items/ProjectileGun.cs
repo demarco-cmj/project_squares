@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System;
 using UnityEngine;
 using Photon.Pun;
 using Photon;
@@ -19,18 +18,20 @@ public class ProjectileGun : Gun
     public TMP_Text ammoText;
     int bulletsLeft, bulletsMax;
 
-    //Relaod Icon
+    //Reload Icon
     public Image reloadIcon;
     float currentFillValue;
     Vector3 rotationEuler = Vector3.zero;
     
     //Animation
     public Animator weaponAnimation;
+    RecoilCam recoilCam;
 
     void Awake()
     {
         PV = GetComponent<PhotonView>();
         weaponAnimation = GetComponentInParent<Animator>();
+        recoilCam = GetComponentInParent<RecoilCam>();
         timeBetweenShots = 60 / ((GunInfo)itemInfo).fireRate; //Measured in rounds/min
         lastShot = -1f;
         bulletsMax = bulletsLeft = ((GunInfo)itemInfo).magazineSize;
@@ -52,24 +53,31 @@ public class ProjectileGun : Gun
             if (((GunInfo)itemInfo).isAutomatic)
             {
                 //Debug.Log("Is automatic");                 
-                Shoot(tp);
+                Shoot(tp, true);
                 
             }
             else if (Input.GetMouseButtonDown(0))
             {
                 //Debug.Log("Isnt automatic");
-                Shoot(tp);
+                Shoot(tp, false);
             }
         }
     }
 
-    void Shoot(Vector3 tp)
+    void Shoot(Vector3 tp, bool isAuto)
     {
         if(!reloading && bulletsLeft > 0) //shoot
         {
-            weaponAnimation.SetBool("isShooting", true);
-            weaponAnimation.SetBool("isWalking", false);
-            weaponAnimation.SetBool("isIdle", false);
+            if(isAuto) {
+                weaponAnimation.SetBool("isShooting", true);
+                recoilCam.CamRecoil();
+                // weaponAnimation.SetBool("isWalking", false);
+                // weaponAnimation.SetBool("isIdle", false);
+            } else {
+                weaponAnimation.Play("Shoot_1");
+                recoilCam.CamRecoil();
+            }
+ 
 
             bulletsLeft--;
             lastShot = Time.time;
@@ -189,5 +197,15 @@ public class ProjectileGun : Gun
         if (reloadIcon.gameObject != null) {
             reloadIcon.gameObject.SetActive(false);
         }
+    }
+
+    /*************** RECOIL **************/
+
+    void CalculateRecoil() {
+        //currentBullet.GetComponent<Rigidbody>().AddForce(cam.transform.up * ((GunInfo)itemInfo).recoil, ForceMode.Impulse); //adds upward force to bullets
+        float changeX, changeY;
+
+        changeX = Random.Range(-1.0f, 1.0f) / 2 * ((GunInfo)itemInfo).horizonalRecoil;
+        changeY = Random.Range(-1.0f, 1.0f) / 2 * ((GunInfo)itemInfo).verticalRecoil; //TODO add respect for the amount of time pressed
     }
 }

@@ -13,7 +13,7 @@ public class GrappleGun : MonoBehaviour
     private Vector3 currentGrapplePosition;
     public LayerMask isGrapplable;
     public Transform grappleSpawn, playerCam;
-    private float maxDistance = 25f;
+    private float maxDistance = 15f;
     private SpringJoint joint;
     private bool isGrappling = false;
     private Vector3 gx, gy;
@@ -55,12 +55,15 @@ public class GrappleGun : MonoBehaviour
 
             float distanceFromPoint = Vector3.Distance(rb.position, grapplePoint);
 
-            joint.maxDistance = distanceFromPoint * 0.4f;
-            joint.minDistance = distanceFromPoint * 0.3f;
+            
+            joint.maxDistance = 0.1f;
+            joint.minDistance = 0.1f;
+            //joint.maxDistance = distanceFromPoint * 0.4f; //dynamic size, less pull
+            //joint.minDistance = distanceFromPoint * 0.3f;
 
-            joint.spring = 50f;
-            joint.damper = 10f;
-            joint.massScale = 4.5f;
+            joint.spring = 100f;
+            joint.damper = 80f;
+            joint.massScale = 2.5f;
 
             lr.positionCount = 2;
             currentGrapplePosition = grappleSpawn.position;

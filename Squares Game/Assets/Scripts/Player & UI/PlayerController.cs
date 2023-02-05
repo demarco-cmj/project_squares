@@ -329,15 +329,17 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     void UseItem()
     {
-        //Using items in hand
-        if(Input.GetMouseButton(0))  //now sends over at rapid fire
-        {
-            // Debug.Log("IS shooting");
-            items[itemIndex].Use(Aim());
-        }
-        else if(Input.GetKeyDown("r")) //If player wants to reload
-        {
-            items[itemIndex].Reload();
+        if (!weaponAnimation.GetBool("isSprinting")) {
+            //Using items in hand
+            if(Input.GetMouseButton(0))  //now sends over at rapid fire
+            {
+                // Debug.Log("IS shooting");
+                items[itemIndex].Use(Aim());
+            }
+            else if(Input.GetKeyDown("r")) //If player wants to reload
+            {
+                items[itemIndex].Reload();
+            }
         }
 
         if(Input.GetMouseButtonUp(0)) {
