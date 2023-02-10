@@ -1666,7 +1666,7 @@ MonoBehaviour:
   rotationSpeed: 6
   returnSpeed: 25
   cam: {fileID: 6596321949861292274}
-  recoilRotation: {x: 10, y: 5, z: 50}
+  recoilRotation: {x: 25, y: 15, z: 30}
 --- !u!1 &4611953659953479734
 GameObject:
   m_ObjectHideFlags: 0

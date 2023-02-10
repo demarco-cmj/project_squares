@@ -19,17 +19,13 @@ public class PlayerManager : MonoBehaviour
     private int startingLives = 2;
     private Dictionary < int, int > playerLives = new Dictionary<int, int>();
 
-    private ExitGames.Client.Photon.Hashtable myCustomProperties = new ExitGames.Client.Photon.Hashtable();
+    private ExitGames.Client.Photon.Hashtable myCustomProps = new ExitGames.Client.Photon.Hashtable();
 
     void Awake()
     {
         PV = GetComponent<PhotonView>();
         killFeedObj = GameObject.FindWithTag("KillFeed");
         scoreboardObj = GameObject.FindWithTag("Scoreboard");
-
-        if (PhotonNetwork.IsMasterClient) {
-            //LivesSettup(); //TODO
-        }
     }
     
     void Start()
@@ -37,16 +33,18 @@ public class PlayerManager : MonoBehaviour
         if(PV.IsMine)
         {
             CreateController();
+            LivesSettup();
         }
     }
 
     void LivesSettup() {
-        myCustomProperties["LivesRemaining"] = startingLives;
+        myCustomProps["LivesRemaining"] = startingLives;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(myCustomProps);
 
-        foreach (Player player in PhotonNetwork.PlayerList) {
-            player.SetCustomProperties(myCustomProperties);
-            Debug.Log(player.NickName + " lives set to: " + player.CustomProperties["LivesRemaining"]);
-        }
+        // foreach (Player player in PhotonNetwork.PlayerList) {
+        //     player.SetCustomProperties(myCustomProperties);
+        //     Debug.Log(player.NickName + " lives set to: " + player.CustomProperties["LivesRemaining"]);
+        // }
     }
 
     void CreateController()
@@ -59,17 +57,26 @@ public class PlayerManager : MonoBehaviour
 
     public void Die(string killer, string body, bool suicide)
     {
-        //PV.RPC("RPC_HideBody", RpcTarget.All, controller); //TODO: Not used
+        //Send to kill feed
         TraceKill(killer, body, suicide);
+
+        //update custom properties
+        myCustomProps["LivesRemaining"] = (int)PhotonNetwork.LocalPlayer.CustomProperties["LivesRemaining"] - 1;
+        PhotonNetwork.LocalPlayer.CustomProperties = myCustomProps;
+
+        //Check lives remaining for if dead
+        if((int)PhotonNetwork.LocalPlayer.CustomProperties["LivesRemaining"] <= 0 ) {
+            Debug.Log("YOU ARE DEAD");
+            
+        }
+
+        //PV.RPC("RPC_HideBody", RpcTarget.All, controller); //TODO: Not used
         StartCoroutine(DeleteBody(killer, body, suicide));
-        // PhotonNetwork.Destroy(controller);
-        // TraceKill(killer, body, suicide);
-        // CreateController();
     }
 
     void TraceKill(string killer, string body, bool suicide)
     {   
-        //Debug.Log("New feed: " + killer +  " killed " + body);
+        Debug.Log("New feed: " + killer +  " killed " + body);
         PV.RPC("RPC_TraceKill", RpcTarget.All, killer, body, suicide);
     }
 

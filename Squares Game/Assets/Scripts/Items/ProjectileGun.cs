@@ -35,7 +35,7 @@ public class ProjectileGun : Gun
         timeBetweenShots = 60 / ((GunInfo)itemInfo).fireRate; //Measured in rounds/min
         lastShot = -1f;
         bulletsMax = bulletsLeft = ((GunInfo)itemInfo).magazineSize;
-        SetAmmoText();        
+        SetAmmoText();      
     }
 
     void Update () {
@@ -193,9 +193,11 @@ public class ProjectileGun : Gun
     }
 
     void EndReloadIconAnimation() {
-        rotationEuler = Vector3.zero;
-        if (reloadIcon.gameObject != null) {
-            reloadIcon.gameObject.SetActive(false);
+        if(PV.IsMine) {
+            rotationEuler = Vector3.zero;
+            if (reloadIcon.gameObject) {
+                reloadIcon.gameObject.SetActive(false);
+            }
         }
     }
 

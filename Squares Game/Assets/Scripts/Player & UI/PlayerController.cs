@@ -55,6 +55,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     public GameObject damagePopupPrefab, damagePlane;
     [SerializeField] GameObject[] damageSpawns;
 
+    /************************* PUN CUSTOM PROPERTIES *************************/
+    Hashtable myCustomProperties = new Hashtable();
+
     /************************* MODIFIABLE STATS *************************/
     
     //Weapons
@@ -96,6 +99,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             {
                 gameObject.SetActive(false);
             }
+            
         }
 
         defaultHeight = transform.localScale.y; //save height
@@ -120,6 +124,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
         Pause();
         CheckInBounds();
+
+        //Debug.Log("Lives remaining: " + PhotonNetwork.LocalPlayer.CustomProperties["LivesRemaining"]);
 
     }
 
@@ -254,7 +260,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
      void EquipItem(int tempIndex)
      {
-        if(tempIndex == prevItemIndex)
+        if(tempIndex == prevItemIndex) //if unchanged
            return;
 
         items[itemIndex].CancelUpdate(); //Cancel incomplete reload of previous item
@@ -272,22 +278,26 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         
         prevItemIndex = itemIndex;
 
-        //Sync With other players, E7@3:00
-        if(PV.IsMine)
-        {
-            Hashtable hash = new Hashtable();
-            hash.Add("itemIndex", itemIndex);
-            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
+        if(PV.IsMine) {
+            PV.RPC("UpdateItem_RPC", RpcTarget.Others, PV.ViewID, tempIndex);
         }
+        // Sync With other players, E7@3:00
+        // if(PV.IsMine)
+        // {
+        //     Hashtable hash = new Hashtable();
+        //     hash.Add("itemIndex", itemIndex);
+        //     PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        // }
      }
 
-	public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-	{
-		if(!PV.IsMine && targetPlayer == PV.Owner)
-		{
-			EquipItem((int)changedProps["itemIndex"]);
-		}
-	}
+	// public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+	// {
+	// 	if(!PV.IsMine && targetPlayer == PV.Owner) //when custom prop is updated all players get rpc, this filters for other players' view and then targets the correect game obj
+	// 	{
+	// 		EquipItem((int)changedProps["itemIndex"]); //creating new custom hash and overwriting the old?
+	// 	}
+	// }
 
     void UpdateItem()
     {
@@ -325,6 +335,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             }
         }
 
+    }
+
+    [PunRPC]
+    void UpdateItem_RPC(int id, int index) {
+        PhotonView.Find(id).gameObject.GetComponent<PlayerController>().EquipItem(index);
+        Debug.Log("GOT RPC: index: " + index);
     }
 
     void UseItem()

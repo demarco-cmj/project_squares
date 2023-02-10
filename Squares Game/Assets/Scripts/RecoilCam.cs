@@ -9,7 +9,7 @@ public class RecoilCam : MonoBehaviour
     public float returnSpeed = 25;
     [SerializeField] Camera cam;
 
-    public Vector3 recoilRotation = new Vector3(20f, 20f, 20f); //aim from hip (straight back, horizontal, vertical)
+    public Vector3 recoilRotation = new Vector3(10f, 5f, 8f); //aim from hip (straight back, horizontal, vertical)
     // public Vector3 recoilRotationAiming = new Vector3(2f, 2f, 2f); //for ads
 
     // public bool isAiming;
@@ -18,10 +18,13 @@ public class RecoilCam : MonoBehaviour
     private Vector3 rot;
 
     void FixedUpdate()
-    {
-        currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, returnSpeed * Time.deltaTime);
-        rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.deltaTime);
-        cam.transform.localRotation = Quaternion.Euler(rot);                                    //TODO creates null err
+    {   
+        if (cam) {
+            currentRotation = Vector3.Lerp(currentRotation, Vector3.zero, returnSpeed * Time.deltaTime);
+            rot = Vector3.Slerp(rot, currentRotation, rotationSpeed * Time.deltaTime);
+            cam.transform.localRotation = Quaternion.Euler(rot);       
+        }
+                             //TODO creates null err
     }
 
     public void CamRecoil() {
