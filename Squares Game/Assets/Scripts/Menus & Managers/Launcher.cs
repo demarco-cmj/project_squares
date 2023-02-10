@@ -126,6 +126,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void StartGame()
     {
+        PlayerPropertiesManager.InitalizeAllPlayersProperties();
         PhotonNetwork.LoadLevel(2); //load the numbered scene for everyone
     }
 }

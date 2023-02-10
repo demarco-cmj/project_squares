@@ -58,17 +58,17 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     /************************* PUN CUSTOM PROPERTIES *************************/
     Hashtable myCustomProperties = new Hashtable();
 
-    /************************* MODIFIABLE STATS *************************/
+    // /************************* MODIFIABLE STATS *************************/
     
-    //Weapons
-    float damageMod, recoilMod, fireRateMod, bulletVelocityMod, cooldownSpeedMod, reloadTimeMod;
-    int magazineSizeMod, bulletsPerTapMod, bulletBounces;
+    // //Weapons
+    // float damageMod, recoilMod, fireRateMod, bulletVelocityMod, cooldownSpeedMod, reloadTimeMod;
+    // int magazineSizeMod, bulletsPerTapMod, bulletBounces;
 
-    //Player Movement
-    float moveSpeedMod, jumpForceMod;
+    // //Player Movement
+    // float moveSpeedMod, jumpForceMod;
 
-    //Player Other
-    float healthMod;
+    // //Player Other
+    // float healthMod;
 
     /************************* SCRIPT CORE FUNCTION *************************/
 
@@ -126,6 +126,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         CheckInBounds();
 
         //Debug.Log("Lives remaining: " + PhotonNetwork.LocalPlayer.CustomProperties["LivesRemaining"]);
+        //Debug.Log("Lives: " + PlayerPropertiesManager.GetTargetPlayerProperty(PV.ViewID, "LivesRemaining"));
+        Debug.Log("damage mod: " + PlayerPropertiesManager.GetTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.damageMod));
+        Debug.Log("fire rate mod: " + PlayerPropertiesManager.GetTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.fireRateMod));
 
     }
 
