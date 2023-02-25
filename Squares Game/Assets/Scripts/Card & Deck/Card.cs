@@ -5,9 +5,18 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Cards/New Card")]
 public class Card : ScriptableObject
 {
-    public string nameText, statText;
+    // public class Stat {
+    //     public string property;
+    //     public int value;
+    //     bool multiply;
+    //     bool add;
+    // }
 
-    public void Select()
+    public string nameText, statText;
+    [SerializeField] StatChange[] stats;
+
+
+    public void SelectCard()
     {
 
     }

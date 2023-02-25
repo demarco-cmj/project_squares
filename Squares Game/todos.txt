@@ -1,5 +1,6 @@
 - Check if player controller is already deleted before deleting on despawn
 - reload icon null refrence when swapping guns in multiplayer
+- add player props to joined players OR make them dead for match
 
 
 

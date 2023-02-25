@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f1f745ff4210f949a2f8279568c5143, type: 3}
   m_Name: moveSpeed1
   m_EditorClassIdentifier: 
-  nameText: 
-  statText: 
+  nameText: Move Speed 1
+  statText: Make you run 100% faster
+  stats: []

@@ -15,8 +15,8 @@ public class PlayerManager : MonoBehaviour
     GameObject controller;
     private GameObject killFeedObj;
     private GameObject scoreboardObj;
+    private int numberPlayers;
 
-    private int startingLives = 2;
     private Dictionary < int, int > playerLives = new Dictionary<int, int>();
 
     private ExitGames.Client.Photon.Hashtable myCustomProps = new ExitGames.Client.Photon.Hashtable();
@@ -33,18 +33,7 @@ public class PlayerManager : MonoBehaviour
         if(PV.IsMine)
         {
             CreateController();
-            LivesSettup();
         }
-    }
-
-    void LivesSettup() {
-        myCustomProps["LivesRemaining"] = startingLives;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(myCustomProps);
-
-        // foreach (Player player in PhotonNetwork.PlayerList) {
-        //     player.SetCustomProperties(myCustomProperties);
-        //     Debug.Log(player.NickName + " lives set to: " + player.CustomProperties["LivesRemaining"]);
-        // }
     }
 
     void CreateController()
@@ -61,13 +50,17 @@ public class PlayerManager : MonoBehaviour
         TraceKill(killer, body, suicide);
 
         //update custom properties
-        myCustomProps["LivesRemaining"] = (int)PhotonNetwork.LocalPlayer.CustomProperties["LivesRemaining"] - 1;
-        PhotonNetwork.LocalPlayer.CustomProperties = myCustomProps;
+        PlayerPropertiesManager.ChangeTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.livesRemaining, -1, false, true);
+        PlayerPropertiesManager.ChangeTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.damageMod, 1, false, true);
 
         //Check lives remaining for if dead
-        if((int)PhotonNetwork.LocalPlayer.CustomProperties["LivesRemaining"] <= 0 ) {
+        if(PlayerPropertiesManager.GetTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.livesRemaining) <= 0 ) {
             Debug.Log("YOU ARE DEAD");
             
+        }
+
+        if (CheckMatchOver()) {
+            Launcher.LoadCardPicking();
         }
 
         //PV.RPC("RPC_HideBody", RpcTarget.All, controller); //TODO: Not used
@@ -76,11 +69,11 @@ public class PlayerManager : MonoBehaviour
 
     void TraceKill(string killer, string body, bool suicide)
     {   
-        Debug.Log("New feed: " + killer +  " killed " + body);
+        // Debug.Log("New feed: " + killer +  " killed " + body);
         PV.RPC("RPC_TraceKill", RpcTarget.All, killer, body, suicide);
     }
 
-    IEnumerator DeleteBody(string killer, string body, bool suicide) //TODO: Not used
+    IEnumerator DeleteBody(string killer, string body, bool suicide)
     {
         if(!suicide)
         {
@@ -108,5 +101,24 @@ public class PlayerManager : MonoBehaviour
             scoreboardObj.GetComponent<Scoreboard>().IncrementKills(killer);
         }
         scoreboardObj.GetComponent<Scoreboard>().IncrementDeaths(body);
+    }
+
+    bool CheckMatchOver() {
+        int playersLeft = 0;
+
+        foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList) {
+            if (PlayerPropertiesManager.GetTargetPlayerPropertyAC(player.ActorNumber, PlayerPropertiesManager.livesRemaining) > 0) {
+                playersLeft++;
+
+                if (playersLeft >= 2) {
+                    return false;
+                }
+            }
+            //Debug.Log("ID: " + player.ActorNumber + "Lives: " + PlayerPropertiesManager.GetTargetPlayerPropertyAC(player.ActorNumber, PlayerPropertiesManager.livesRemaining));
+        }
+
+        Debug.Log("MATCH OVER");
+
+        return true; //all but one player dead is over
     }
 }

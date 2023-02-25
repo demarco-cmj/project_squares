@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f1f745ff4210f949a2f8279568c5143, type: 3}
   m_Name: bigBullets
   m_EditorClassIdentifier: 
-  nameText: 
-  statText: 
+  nameText: Big bullets
+  statText: Makes bullets 50% bigger!
+  stats:
+  - {fileID: 11400000, guid: fce477fe2e0c47c4f9ce16cdb623b7ef, type: 2}

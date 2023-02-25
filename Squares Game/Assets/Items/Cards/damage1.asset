@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: damage1
   m_EditorClassIdentifier: 
   nameText: Damage 1
-  statText: 15% more damage
+  statText: 200% more damage
+  stats:
+  - {fileID: 11400000, guid: fce477fe2e0c47c4f9ce16cdb623b7ef, type: 2}

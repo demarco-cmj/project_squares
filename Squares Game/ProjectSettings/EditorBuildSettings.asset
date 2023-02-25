@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameScene2.unity
     guid: dcd59e73bac9b5347962f38cde0a18e4
+  - enabled: 1
+    path: Assets/Scenes/CardPicking.unity
+    guid: 04e0b065a14d7464fb183516a24dba09
   m_configObjects: {}

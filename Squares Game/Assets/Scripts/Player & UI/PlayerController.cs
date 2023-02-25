@@ -127,8 +127,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
         //Debug.Log("Lives remaining: " + PhotonNetwork.LocalPlayer.CustomProperties["LivesRemaining"]);
         //Debug.Log("Lives: " + PlayerPropertiesManager.GetTargetPlayerProperty(PV.ViewID, "LivesRemaining"));
-        Debug.Log("damage mod: " + PlayerPropertiesManager.GetTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.damageMod));
-        Debug.Log("fire rate mod: " + PlayerPropertiesManager.GetTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.fireRateMod));
+        // Debug.Log("damage mod: " + PlayerPropertiesManager.GetTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.damageMod));
+        // Debug.Log("fire rate mod: " + PlayerPropertiesManager.GetTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.fireRateMod));
 
     }
 
