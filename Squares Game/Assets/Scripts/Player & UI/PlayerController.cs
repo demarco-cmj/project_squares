@@ -24,28 +24,23 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     //Movement
     float verticalLookRotation;
-    bool isGrounded;
+    bool isGrounded, isCrouching;
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;
     //Vector3 slopeNormalMove;
     RaycastHit slopeHit;
+    float defaultHeight;
+
+    //Animation
+    public Animator weaponAnimation;
+    public float walkAnimSpeed;
 
     //Grapple
-    private LineRenderer lr;
-    private Vector3 grapplePoint;
-    private Vector3 currentGrapplePosition;
-    public LayerMask isGrapplable;
-    public Transform grappleSpawn, playerCam;
-    private float maxDistance = 25f;
-    private SpringJoint joint;
-    private bool isGrappling = false;
-    private Vector3 gx, gy;
-
-    private Dictionary < int, Vector3 > playersGrappling = new Dictionary<int, Vector3>();
+    private GrappleGun gg;
 
     //Client Sync
-    Rigidbody rb;
-    PhotonView PV;
+    public Rigidbody rb;
+    public PhotonView PV;
 
     //Health & UI
     const float maxHealth = 100f;
@@ -55,22 +50,25 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] Image healthbarImgWorld;
     [SerializeField] GameObject ui;
     [SerializeField] PhotonView worldUI;
-    bool isPaused = false;
+    public static bool isPaused = false;
 
     public GameObject damagePopupPrefab, damagePlane;
     [SerializeField] GameObject[] damageSpawns;
 
-    /************************* MODIFIABLE STATS *************************/
+    /************************* PUN CUSTOM PROPERTIES *************************/
+    Hashtable myCustomProperties = new Hashtable();
+
+    // /************************* MODIFIABLE STATS *************************/
     
-    //Weapons
-    float damageMod, recoilMod, fireRateMod, bulletVelocityMod, cooldownSpeedMod, reloadTimeMod;
-    int magazineSizeMod, bulletsPerTapMod, bulletBounces;
+    // //Weapons
+    // float damageMod, recoilMod, fireRateMod, bulletVelocityMod, cooldownSpeedMod, reloadTimeMod;
+    // int magazineSizeMod, bulletsPerTapMod, bulletBounces;
 
-    //Player Movement
-    float moveSpeedMod, jumpForceMod;
+    // //Player Movement
+    // float moveSpeedMod, jumpForceMod;
 
-    //Player Other
-    float healthMod;
+    // //Player Other
+    // float healthMod;
 
     /************************* SCRIPT CORE FUNCTION *************************/
 
@@ -78,10 +76,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     {
         rb = GetComponent<Rigidbody>();
         PV = GetComponent<PhotonView>();
+        gg = GetComponent<GrappleGun>();
+        
 
         playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
-
-        lr = GetComponent<LineRenderer>();
     }
 
     void Start()
@@ -101,7 +99,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             {
                 gameObject.SetActive(false);
             }
+            
         }
+
+        defaultHeight = transform.localScale.y; //save height
     }
 
     void Update()
@@ -115,7 +116,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             MouseLook();
             Move();
             Jump();
-            Grapple();
+            Crouch();
+            gg.Grapple();
             UpdateItem();
             UseItem(); //where gun stats need to be fed
         }
@@ -123,12 +125,19 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         Pause();
         CheckInBounds();
 
+        //Debug.Log("Lives remaining: " + PhotonNetwork.LocalPlayer.CustomProperties["LivesRemaining"]);
+        //Debug.Log("Lives: " + PlayerPropertiesManager.GetTargetPlayerProperty(PV.ViewID, "LivesRemaining"));
+        // Debug.Log("damage mod: " + PlayerPropertiesManager.GetTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.damageMod));
+        // Debug.Log("fire rate mod: " + PlayerPropertiesManager.GetTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.fireRateMod));
+
     }
 
     void LateUpdate()
     {
-        DrawRopeLocal();
-        DrawAllRopes();
+        gg.DrawRopeLocal();
+        gg.DrawAllRopes();
+        weaponAnimation.SetBool("isJumping", false);
+        weaponAnimation.SetBool("isSprintJumping", false);
         
     }
 
@@ -147,16 +156,46 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     void Move()
     {
         Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
+        float tempWalk = walkSpeed, tempSprint = sprintSpeed;
+
+        if (isCrouching) { //Crouch speed penalty
+            tempWalk = walkSpeed * 0.6f;
+            tempSprint = sprintSpeed * 0.6f;
+        }
         
         if(OnSlope()) //if on a slope
         {
             Vector3 slopeNormalMove = Vector3.ProjectOnPlane(moveDir, slopeHit.normal);
-            moveAmount = Vector3.SmoothDamp(moveAmount, slopeNormalMove * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed), ref smoothMoveVelocity, smoothTime);
+            moveAmount = Vector3.SmoothDamp(moveAmount, slopeNormalMove * (Input.GetKey(KeyCode.LeftShift) ? tempSprint : tempWalk), ref smoothMoveVelocity, smoothTime);
         }
         else
         {
-             moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed), ref smoothMoveVelocity, smoothTime); //use sprint speed if holding shift, walk if not
+             moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? tempSprint : tempWalk), ref smoothMoveVelocity, smoothTime); //use sprint speed if holding shift, walk if not
         }
+
+
+        //Animation
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) {
+            if (Input.GetKey(KeyCode.LeftShift)) {
+                // Debug.Log("IS sprinting");
+                weaponAnimation.SetBool("isSprinting", true);
+                weaponAnimation.SetBool("isWalking", false);
+                weaponAnimation.SetBool("isIdle", false);
+
+            } else {
+            // Debug.Log("IS walking");
+            weaponAnimation.SetBool("isWalking", true);
+            weaponAnimation.SetBool("isIdle", false);
+            weaponAnimation.SetBool("isSprinting", false);
+            }
+        } else {
+            // Debug.Log("IS idle");
+            weaponAnimation.SetBool("isIdle", true);
+            weaponAnimation.SetBool("isWalking", false);
+            weaponAnimation.SetBool("isSprinting", false);
+        }
+        
+
     }
 
     void Jump()
@@ -164,6 +203,22 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.AddForce(transform.up * (jumpForce * 50)); //multiply jump force by weight of player
+            if (weaponAnimation.GetBool("isSprinting")) {
+                weaponAnimation.SetBool("isSprintJumping", true);
+            } else {
+                weaponAnimation.SetBool("isJumping", true);
+            }
+        }
+    }
+
+    void Crouch() {
+        if (Input.GetKeyDown(KeyCode.LeftControl)) {
+            isCrouching = true;
+            transform.localScale = new Vector3(transform.localScale.x, defaultHeight * 0.7f, transform.localScale.z);
+            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+        } else if (Input.GetKeyUp(KeyCode.LeftControl)) {
+            isCrouching = false;
+            transform.localScale = new Vector3(transform.localScale.x, defaultHeight, transform.localScale.z);
         }
     }
 
@@ -208,7 +263,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
      void EquipItem(int tempIndex)
      {
-        if(tempIndex == prevItemIndex)
+        if(tempIndex == prevItemIndex) //if unchanged
            return;
 
         items[itemIndex].CancelUpdate(); //Cancel incomplete reload of previous item
@@ -226,22 +281,26 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         
         prevItemIndex = itemIndex;
 
-        //Sync With other players, E7@3:00
-        if(PV.IsMine)
-        {
-            Hashtable hash = new Hashtable();
-            hash.Add("itemIndex", itemIndex);
-            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
+        if(PV.IsMine) {
+            PV.RPC("UpdateItem_RPC", RpcTarget.Others, PV.ViewID, tempIndex);
         }
+        // Sync With other players, E7@3:00
+        // if(PV.IsMine)
+        // {
+        //     Hashtable hash = new Hashtable();
+        //     hash.Add("itemIndex", itemIndex);
+        //     PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        // }
      }
 
-	public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-	{
-		if(!PV.IsMine && targetPlayer == PV.Owner)
-		{
-			EquipItem((int)changedProps["itemIndex"]);
-		}
-	}
+	// public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+	// {
+	// 	if(!PV.IsMine && targetPlayer == PV.Owner) //when custom prop is updated all players get rpc, this filters for other players' view and then targets the correect game obj
+	// 	{
+	// 		EquipItem((int)changedProps["itemIndex"]); //creating new custom hash and overwriting the old?
+	// 	}
+	// }
 
     void UpdateItem()
     {
@@ -281,17 +340,29 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     }
 
+    [PunRPC]
+    void UpdateItem_RPC(int id, int index) {
+        PhotonView.Find(id).gameObject.GetComponent<PlayerController>().EquipItem(index);
+        Debug.Log("GOT RPC: index: " + index);
+    }
+
     void UseItem()
     {
-        //Using items in hand
-        if(Input.GetMouseButton(0))  //now sends over at rapid fire
-        {
-            //Debug.Log("Holding M1");
-            items[itemIndex].Use(Aim());
+        if (!weaponAnimation.GetBool("isSprinting")) {
+            //Using items in hand
+            if(Input.GetMouseButton(0))  //now sends over at rapid fire
+            {
+                // Debug.Log("IS shooting");
+                items[itemIndex].Use(Aim());
+            }
+            else if(Input.GetKeyDown("r")) //If player wants to reload
+            {
+                items[itemIndex].Reload();
+            }
         }
-        else if(Input.GetKeyDown("r")) //If player wants to reload
-        {
-            items[itemIndex].Reload();
+
+        if(Input.GetMouseButtonUp(0)) {
+            weaponAnimation.SetBool("isShooting", false);
         }
     }
 
@@ -376,98 +447,4 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         }
     }
 
-
-    /************************* GRAPPLE *************************/
-    void Grapple() {
-        if (Input.GetKeyDown(KeyCode.Q)) {
-            isGrappling = startGrapple();
-            if (isGrappling) {
-                PV.RPC("toggleEnemyGrappleON", RpcTarget.Others, PV.ViewID, grapplePoint);
-                
-            }
-        } 
-        else if (Input.GetKeyUp(KeyCode.Q)) {
-            stopGrapple();
-            if (isGrappling) {
-                isGrappling = false;
-                PV.RPC("toggleEnemyGrappleOFF", RpcTarget.Others, PV.ViewID);
-            }
-        }
-    }
-
-    //local player calculation
-    bool startGrapple() {
-        RaycastHit hit;
-        if (Physics.Raycast(origin: rb.position, direction: playerCam.forward, out hit, maxDistance)) {
-
-            grapplePoint = hit.point;
-            joint = rb.gameObject.AddComponent<SpringJoint>();
-            joint.autoConfigureConnectedAnchor = false;
-            joint.connectedAnchor = grapplePoint;
-
-            float distanceFromPoint = Vector3.Distance(rb.position, grapplePoint);
-
-            joint.maxDistance = distanceFromPoint * 0.4f;
-            joint.minDistance = distanceFromPoint * 0.3f;
-
-            joint.spring = 50f;
-            joint.damper = 10f;
-            joint.massScale = 4.5f;
-
-            lr.positionCount = 2;
-            currentGrapplePosition = grappleSpawn.position;
-
-            return true;
-        }
-        return false; //if the same pos, not grappling
-    }
-
-    void stopGrapple() {
-        lr.positionCount = 0;
-        Destroy(joint);
-    }
-
-    void DrawRopeLocal() {
-        // If not grappling, don't draw rope
-        if (!joint) return;
-
-        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 8f); //adds "animation"
-        
-        lr.SetPosition(0, grappleSpawn.position);
-        lr.SetPosition(1, currentGrapplePosition);
-    }
-
-    public bool IsGrappling() {
-        return joint != null;
-    }
-
-    // [PunRPC]
-    // void Test(int id, Vector3 grapplePoint) {
-    //     Debug.Log(PhotonView.Find(id).Owner.NickName + " is grappling \n " + "ID: " + id);
-        
-    // }
-
-
-    [PunRPC]
-    void toggleEnemyGrappleON(int id, Vector3 grapplePoint) {
-        // Debug.Log(PhotonView.Find(id).Owner.NickName + "ON");
-        playersGrappling.Add(id, grapplePoint);  
-    }
-
-    [PunRPC]
-    void toggleEnemyGrappleOFF(int id) {
-        // Debug.Log(PhotonView.Find(id).Owner.NickName + "OFF");
-        //Debug.Log(PhotonView.Find(id).Owner.NickName + " is grappling \n " + "ID: " + id);
-       
-        PhotonView.Find(id).gameObject.GetComponent<LineRenderer>().positionCount = 0;
-        playersGrappling.Remove(id);
-    }
-
-    void DrawAllRopes() {
-        foreach (KeyValuePair<int, Vector3> entry in playersGrappling) {
-            // Debug.Log(PhotonView.Find(entry.Key).Owner.NickName + " is grappling \n " + "ID: " + entry.Key + "Pos: " + entry.Value);
-            PhotonView.Find(entry.Key).gameObject.GetComponent<LineRenderer>().positionCount = 2;
-            PhotonView.Find(entry.Key).gameObject.GetComponent<LineRenderer>().SetPositions(new Vector3[]{PhotonView.Find(entry.Key).gameObject.transform.position, entry.Value});
-        }
-    }
 }

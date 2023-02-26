@@ -126,6 +126,15 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void StartGame()
     {
-        PhotonNetwork.LoadLevel(1);
+        PlayerPropertiesManager.InitalizeAllPlayersProperties();
+        PhotonNetwork.LoadLevel(2); //load the numbered scene for everyone
+    }
+
+
+
+    //GAME SWAPING?
+
+    public static void LoadCardPicking() {
+        PhotonNetwork.LoadLevel(3);
     }
 }
