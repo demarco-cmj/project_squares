@@ -96,7 +96,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.JoinRoom(info.Name);
         MenuManager.inst.OpenMenu("loading");
-        Debug.Log("Joined Room");
+        //Debug.Log("Joined Room");
     }
 
     public override void OnLeftRoom()

@@ -17,6 +17,7 @@ ScriptsOnlyBuild:
     - PlayerNameManager
     - ProjectileGun
     - ProjectileInfo
+    - RigidbodySync
     - RoomListItem
     - RoomManager
     - Scoreboard
@@ -90,7 +91,11 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
+    - Class: 54
+      Script: {instanceID: 0}
     - Class: 64
+      Script: {instanceID: 0}
+    - Class: 65
       Script: {instanceID: 0}
     - Class: 72
       Script: {instanceID: 0}
@@ -119,6 +124,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 3216}
     - Class: 114
+      Script: {instanceID: 3484}
+    - Class: 114
       Script: {instanceID: 3492}
     - Class: 114
       Script: {instanceID: 3632}
@@ -131,15 +138,17 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 4888}
     - Class: 114
-      Script: {instanceID: 5314}
+      Script: {instanceID: 5090}
     - Class: 114
-      Script: {instanceID: 5816}
+      Script: {instanceID: 5316}
     - Class: 114
-      Script: {instanceID: 5862}
+      Script: {instanceID: 5818}
     - Class: 114
-      Script: {instanceID: 6022}
+      Script: {instanceID: 5864}
     - Class: 114
-      Script: {instanceID: 6064}
+      Script: {instanceID: 6024}
+    - Class: 114
+      Script: {instanceID: 6066}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -196,6 +205,8 @@ ScriptsOnlyBuild:
     - Class: 90
       Script: {instanceID: 0}
     - Class: 95
+      Script: {instanceID: 0}
+    - Class: 96
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
@@ -272,24 +283,28 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 5068}
     - Class: 114
-      Script: {instanceID: 5240}
+      Script: {instanceID: 5090}
     - Class: 114
-      Script: {instanceID: 5292}
+      Script: {instanceID: 5242}
     - Class: 114
-      Script: {instanceID: 5350}
+      Script: {instanceID: 5294}
     - Class: 114
-      Script: {instanceID: 5454}
+      Script: {instanceID: 5352}
     - Class: 114
       Script: {instanceID: 5456}
     - Class: 114
-      Script: {instanceID: 5670}
+      Script: {instanceID: 5458}
     - Class: 114
-      Script: {instanceID: 5862}
+      Script: {instanceID: 5672}
     - Class: 114
-      Script: {instanceID: 6022}
+      Script: {instanceID: 5864}
     - Class: 114
-      Script: {instanceID: 6064}
+      Script: {instanceID: 6024}
+    - Class: 114
+      Script: {instanceID: 6066}
     - Class: 115
+      Script: {instanceID: 0}
+    - Class: 120
       Script: {instanceID: 0}
     - Class: 128
       Script: {instanceID: 0}
@@ -304,6 +319,8 @@ ScriptsOnlyBuild:
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 212
       Script: {instanceID: 0}
     - Class: 213
       Script: {instanceID: 0}
@@ -880,7 +897,7 @@ ScriptsOnlyBuild:
     className: TMP_FrameRateCounter
   - hash:
       serializedVersion: 2
-      Hash: c5486ab93379ebd13b869b4f591c7687
+      Hash: 1dc2097687df2423330ddc3099b38f81
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -1240,6 +1257,12 @@ ScriptsOnlyBuild:
     className: TMP_Settings
   - hash:
       serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: RigidbodySync
+  - hash:
+      serializedVersion: 2
       Hash: 3375c3d749f8f4cad889721b431bdc27
     assemblyName: Assembly-CSharp.dll
     namespaceName: TMPro.Examples
@@ -1490,6 +1513,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Postprocessing.Runtime.dll
     namespaceName: UnityEngine.Rendering.PostProcessing
     className: AmbientOcclusion
+  - hash:
+      serializedVersion: 2
+      Hash: 71b4229b51726e6c104e545b3e9fbb4a
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: GrappleGun
   platform: 19
   scenePathNames:
   - Assets/Scenes/MainMenu.unity

@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     //Fields
     [SerializeField] float mouseSens, sprintSpeed, walkSpeed, jumpForce, smoothTime;
     [SerializeField] GameObject camHolder;
+    [SerializeField] GameObject groundCheck;
     [SerializeField] Camera cam;
     
 
@@ -26,6 +27,21 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     bool isGrounded;
     Vector3 smoothMoveVelocity;
     Vector3 moveAmount;
+    //Vector3 slopeNormalMove;
+    RaycastHit slopeHit;
+
+    //Grapple
+    private LineRenderer lr;
+    private Vector3 grapplePoint;
+    private Vector3 currentGrapplePosition;
+    public LayerMask isGrapplable;
+    public Transform grappleSpawn, playerCam;
+    private float maxDistance = 25f;
+    private SpringJoint joint;
+    private bool isGrappling = false;
+    private Vector3 gx, gy;
+
+    private Dictionary < int, Vector3 > playersGrappling = new Dictionary<int, Vector3>();
 
     //Client Sync
     Rigidbody rb;
@@ -64,6 +80,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         PV = GetComponent<PhotonView>();
 
         playerManager = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManager>();
+
+        lr = GetComponent<LineRenderer>();
     }
 
     void Start()
@@ -97,6 +115,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
             MouseLook();
             Move();
             Jump();
+            Grapple();
             UpdateItem();
             UseItem(); //where gun stats need to be fed
         }
@@ -104,6 +123,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         Pause();
         CheckInBounds();
 
+    }
+
+    void LateUpdate()
+    {
+        DrawRopeLocal();
+        DrawAllRopes();
+        
     }
 
 
@@ -121,8 +147,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     void Move()
     {
         Vector3 moveDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
-
-        moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed), ref smoothMoveVelocity, smoothTime); //use sprint speed if holding shift, walk if not
+        
+        if(OnSlope()) //if on a slope
+        {
+            Vector3 slopeNormalMove = Vector3.ProjectOnPlane(moveDir, slopeHit.normal);
+            moveAmount = Vector3.SmoothDamp(moveAmount, slopeNormalMove * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed), ref smoothMoveVelocity, smoothTime);
+        }
+        else
+        {
+             moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * (Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : walkSpeed), ref smoothMoveVelocity, smoothTime); //use sprint speed if holding shift, walk if not
+        }
     }
 
     void Jump()
@@ -147,11 +181,26 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         isGrounded = grounded;
     }
 
+    bool OnSlope()
+    {
+        if(Physics.Raycast(groundCheck.transform.position, Vector3.down, out slopeHit, 0.5f))
+        {
+            if(slopeHit.normal != Vector3.up)
+            {
+                // Debug.Log("onSlope = TRUE");
+                return true;
+            }
+        }
+        // Debug.Log("onSlope = FALSE");
+        return false;
+    }
+
     void FixedUpdate()      //TODO: Smooth player movement between FixedUpdate
     {
         if(!PV.IsMine)
             return;
         
+        //Debug.Log("dir: " + moveAmount);
         rb.MovePosition(rb.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
     }
 
@@ -196,7 +245,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     void UpdateItem()
     {
-         //Gun Item Swapping
+        //Gun Item Swapping
         for(int i = 0; i < items.Length; i++)
         {
             if(Input.GetKeyDown((i + 1).ToString()))
@@ -266,14 +315,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     public void TakeDamage(float targetHP, float damage, string killer) //when player is hit, shooter is led here and send damage to correct target
     {
-        // foreach(Player player in PhotonNetwork.PlayerList)
-        // {
-        //     if(player.PhotonView )
-        // }
-
         //Serve damage to correct player
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, killer); 
 
+        //Update info for other clients
         float fill = targetHP / maxHealth;        
         PV.RPC("RPC_UpdateHealthBar", RpcTarget.All, fill);
         PV.RPC("RPC_ShowDamage", RpcTarget.All, damage);
@@ -301,6 +346,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     void Die(string killer, bool suicide)
     {
         gameObject.tag = "DeadPlayer";
+        //gameObject.GetComponent<Collider>().enabled = false;
+        gameObject.layer = LayerMask.NameToLayer("DeadPlayers");
         playerManager.Die(killer, PV.Owner.NickName, suicide);
     }
 
@@ -326,6 +373,101 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         if(Input.GetKeyDown("escape"))
         {
             isPaused = !isPaused;
+        }
+    }
+
+
+    /************************* GRAPPLE *************************/
+    void Grapple() {
+        if (Input.GetKeyDown(KeyCode.Q)) {
+            isGrappling = startGrapple();
+            if (isGrappling) {
+                PV.RPC("toggleEnemyGrappleON", RpcTarget.Others, PV.ViewID, grapplePoint);
+                
+            }
+        } 
+        else if (Input.GetKeyUp(KeyCode.Q)) {
+            stopGrapple();
+            if (isGrappling) {
+                isGrappling = false;
+                PV.RPC("toggleEnemyGrappleOFF", RpcTarget.Others, PV.ViewID);
+            }
+        }
+    }
+
+    //local player calculation
+    bool startGrapple() {
+        RaycastHit hit;
+        if (Physics.Raycast(origin: rb.position, direction: playerCam.forward, out hit, maxDistance)) {
+
+            grapplePoint = hit.point;
+            joint = rb.gameObject.AddComponent<SpringJoint>();
+            joint.autoConfigureConnectedAnchor = false;
+            joint.connectedAnchor = grapplePoint;
+
+            float distanceFromPoint = Vector3.Distance(rb.position, grapplePoint);
+
+            joint.maxDistance = distanceFromPoint * 0.4f;
+            joint.minDistance = distanceFromPoint * 0.3f;
+
+            joint.spring = 50f;
+            joint.damper = 10f;
+            joint.massScale = 4.5f;
+
+            lr.positionCount = 2;
+            currentGrapplePosition = grappleSpawn.position;
+
+            return true;
+        }
+        return false; //if the same pos, not grappling
+    }
+
+    void stopGrapple() {
+        lr.positionCount = 0;
+        Destroy(joint);
+    }
+
+    void DrawRopeLocal() {
+        // If not grappling, don't draw rope
+        if (!joint) return;
+
+        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 8f); //adds "animation"
+        
+        lr.SetPosition(0, grappleSpawn.position);
+        lr.SetPosition(1, currentGrapplePosition);
+    }
+
+    public bool IsGrappling() {
+        return joint != null;
+    }
+
+    // [PunRPC]
+    // void Test(int id, Vector3 grapplePoint) {
+    //     Debug.Log(PhotonView.Find(id).Owner.NickName + " is grappling \n " + "ID: " + id);
+        
+    // }
+
+
+    [PunRPC]
+    void toggleEnemyGrappleON(int id, Vector3 grapplePoint) {
+        // Debug.Log(PhotonView.Find(id).Owner.NickName + "ON");
+        playersGrappling.Add(id, grapplePoint);  
+    }
+
+    [PunRPC]
+    void toggleEnemyGrappleOFF(int id) {
+        // Debug.Log(PhotonView.Find(id).Owner.NickName + "OFF");
+        //Debug.Log(PhotonView.Find(id).Owner.NickName + " is grappling \n " + "ID: " + id);
+       
+        PhotonView.Find(id).gameObject.GetComponent<LineRenderer>().positionCount = 0;
+        playersGrappling.Remove(id);
+    }
+
+    void DrawAllRopes() {
+        foreach (KeyValuePair<int, Vector3> entry in playersGrappling) {
+            // Debug.Log(PhotonView.Find(entry.Key).Owner.NickName + " is grappling \n " + "ID: " + entry.Key + "Pos: " + entry.Value);
+            PhotonView.Find(entry.Key).gameObject.GetComponent<LineRenderer>().positionCount = 2;
+            PhotonView.Find(entry.Key).gameObject.GetComponent<LineRenderer>().SetPositions(new Vector3[]{PhotonView.Find(entry.Key).gameObject.transform.position, entry.Value});
         }
     }
 }

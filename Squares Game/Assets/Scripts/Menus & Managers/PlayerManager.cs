@@ -1,7 +1,10 @@
+//Class is instanciated as a game object clone on game scene load
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 using System.IO;
 using UnityEngine.SceneManagement;
 
@@ -13,11 +16,20 @@ public class PlayerManager : MonoBehaviour
     private GameObject killFeedObj;
     private GameObject scoreboardObj;
 
+    private int startingLives = 2;
+    private Dictionary < int, int > playerLives = new Dictionary<int, int>();
+
+    private ExitGames.Client.Photon.Hashtable myCustomProperties = new ExitGames.Client.Photon.Hashtable();
+
     void Awake()
     {
         PV = GetComponent<PhotonView>();
         killFeedObj = GameObject.FindWithTag("KillFeed");
         scoreboardObj = GameObject.FindWithTag("Scoreboard");
+
+        if (PhotonNetwork.IsMasterClient) {
+            //LivesSettup(); //TODO
+        }
     }
     
     void Start()
@@ -25,6 +37,15 @@ public class PlayerManager : MonoBehaviour
         if(PV.IsMine)
         {
             CreateController();
+        }
+    }
+
+    void LivesSettup() {
+        myCustomProperties["LivesRemaining"] = startingLives;
+
+        foreach (Player player in PhotonNetwork.PlayerList) {
+            player.SetCustomProperties(myCustomProperties);
+            Debug.Log(player.NickName + " lives set to: " + player.CustomProperties["LivesRemaining"]);
         }
     }
 
@@ -54,7 +75,10 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator DeleteBody(string killer, string body, bool suicide) //TODO: Not used
     {
-        yield return new WaitForSeconds(3);
+        if(!suicide)
+        {
+            yield return new WaitForSeconds(3);
+        }
         PhotonNetwork.Destroy(controller);
         CreateController();
     }
