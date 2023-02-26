@@ -132,9 +132,9 @@ public class Launcher : MonoBehaviourPunCallbacks
 
 
 
-    //GAME SWAPING?
+    // //GAME SWAPING?
 
-    public static void LoadCardPicking() {
-        PhotonNetwork.LoadLevel(3);
-    }
+    // public static void LoadCardPicking() {
+    //     PhotonNetwork.LoadLevel(3);
+    // }
 }

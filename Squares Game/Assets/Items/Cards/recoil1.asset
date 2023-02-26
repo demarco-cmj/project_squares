@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: recoil1
   m_EditorClassIdentifier: 
   nameText: Recoil 1
-  statText: Reduces vertical recoil by 50% and horizontal by 80%
-  stats: []
+  statText: Reduces vertical recoil by 50% and horizontal by 50%
+  stats:
+  - {fileID: 11400000, guid: 0ceb31880a8b2bc44ad15ce5c4908d98, type: 2}
+  - {fileID: 11400000, guid: 9366a3f5dd8dfd241a67327947dfcec2, type: 2}

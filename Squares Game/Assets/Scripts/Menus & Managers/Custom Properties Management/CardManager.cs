@@ -3,19 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Random = System.Random;
+using TMPro;
 
 public class CardManager : MonoBehaviourPunCallbacks
 {
     private int[] playableLevels = new int[2];
     public int currentPlayerID;
+    public int currentPlayerIndex;
 
-    [SerializeField] Card[] cards;
+    public int[] displayedCards;
+
+    [SerializeField] Card[] allCards;
 
     [SerializeField] GameObject[] cardsUI;
+
+    [SerializeField] TMP_Text playerTurnText;
 
     void Start() {
         Cursor.lockState = CursorLockMode.Confined;
         GenerateCards();
+        PlayersTurn();
     }
 
     
@@ -30,22 +37,43 @@ public class CardManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel(2);
     }
 
+    public void PlayersTurn() {
+
+        playerTurnText.text = PhotonNetwork.PlayerList[0].NickName + "'s Turn!";
+        // foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList) {
+        //     if (PlayerPropertiesManager.GetTargetPlayerPropertyAC(player.ActorNumber, PlayerPropertiesManager.livesRemaining) > 0) {
+        //         playersLeft++;
+
+        //         if (playersLeft >= 2) {
+        //             return false;
+        //         }
+        //     }
+        //     //Debug.Log("ID: " + player.ActorNumber + "Lives: " + PlayerPropertiesManager.GetTargetPlayerPropertyAC(player.ActorNumber, PlayerPropertiesManager.livesRemaining));
+        // }
+    }
+
     void GenerateCards() {
         Random r = new Random();
-        int[] cardIndexes = new int[]{r.Next(0, cards.Length), r.Next(0, cards.Length), r.Next(0, cards.Length)}; //TODO: add more than three cards per screne
+        int[] cardIndexes = new int[]{r.Next(0, allCards.Length), r.Next(0, allCards.Length), r.Next(0, allCards.Length)}; //TODO: add more than three allCards per screne
+        displayedCards = cardIndexes;
 
-        Debug.Log(cardIndexes[0] + " " + cardIndexes[1] + " " + cardIndexes[2]);
+        // Debug.Log(cardIndexes[0] + " " + cardIndexes[1] + " " + cardIndexes[2]);
 
-        //TODO: instantiate the cards according to this number
+        //TODO: instantiate the allCards according to this number
         for (int i = 0; i < cardIndexes.Length; i++) {
-            //cardsUI[i].GetComponentInChildren<TMP_Text>().text = cards[cardIndexes[i]].nameText;
-            cardsUI[i].GetComponentInChildren<CardLoader>().LoadCard(cards[cardIndexes[i]].nameText, cards[cardIndexes[i]].statText);
+            //cardsUI[i].GetComponentInChildren<TMP_Text>().text = allCards[cardIndexes[i]].nameText;
+            cardsUI[i].GetComponentInChildren<CardLoader>().LoadCard(allCards[cardIndexes[i]].nameText, allCards[cardIndexes[i]].statText);
         }
 
     }
 
-    public void PickCard() {
+    public void PickCard(int index) {
+        int chosenCardIndex = displayedCards[index];
 
-        //PlayerPropertiesManager.ChangeTargetPlayerProperty(currentPlayerID, );
+        for (int i = 0; i < allCards[chosenCardIndex].stats.Length; i++) {
+            Debug.Log("applying stat: " + PhotonNetwork.PlayerList[0].NickName + " " + allCards[chosenCardIndex].stats[i].property + " " + allCards[chosenCardIndex].stats[i].value + " " + allCards[chosenCardIndex].stats[i].multiply + " " + allCards[chosenCardIndex].stats[i].add);
+            PlayerPropertiesManager.ChangeTargetPlayerPropertyAC(PhotonNetwork.PlayerList[0].ActorNumber, allCards[chosenCardIndex].stats[i].property, allCards[chosenCardIndex].stats[i].value, allCards[chosenCardIndex].stats[i].multiply, allCards[chosenCardIndex].stats[i].add);
+        }
+
     }
 }

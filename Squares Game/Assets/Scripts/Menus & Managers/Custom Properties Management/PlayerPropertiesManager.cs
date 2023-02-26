@@ -24,10 +24,22 @@ public static class PlayerPropertiesManager
 
     /************************* CUSTOM PROPERTIES *************************/
 
+    //Health-Lives
     public static string livesRemaining = "LivesRemaining";
 
+    //Guns
     public static string damageMod = "DamageMod", horizontalRecoilMod = "HorizontalRecoilMod", verticalRecoilMod = "VerticalRecoilMod", fireRateMod = "FireRateMod", 
                             bulletVelocityMod = "BulletVelocityMod", cooldownSpeedMod = "CooldownSpeedMod", reloadTimeMod = "ReloadTimeMod";
+
+    //Bullets-Ammo
+    public static string bulletSize = "BulletSize";
+
+    //Movement
+    public static string baseMoveSpeed = "BaseMoveSpeed";
+
+    //Equipment
+    public static string grappleRange = "GrappleRange";
+
 
     //private ExitGames.Client.Photon.Hashtable myCustomProps = new ExitGames.Client.Photon.Hashtable();
 
@@ -40,56 +52,81 @@ public static class PlayerPropertiesManager
         Hashtable tempProperties = new Hashtable();
 
         //Add all props as zero
-        tempProperties.Add(livesRemaining, 2);
-        tempProperties.Add(damageMod, 0);
-        tempProperties.Add(horizontalRecoilMod, 0);
-        tempProperties.Add(verticalRecoilMod, 0);
-        tempProperties.Add(fireRateMod, 2);
+
+        //Health-Lives
+        tempProperties.Add(livesRemaining, 2f);
+        //Guns
+        tempProperties.Add(damageMod, 1f);
+        tempProperties.Add(horizontalRecoilMod, 1f);
+        tempProperties.Add(verticalRecoilMod, 1f);
+        tempProperties.Add(fireRateMod, 1f);
+        tempProperties.Add(bulletVelocityMod, 1f);
+        tempProperties.Add(cooldownSpeedMod, 1f);
+        tempProperties.Add(reloadTimeMod, 1f);
+        //Bullets-Ammo
+        tempProperties.Add(bulletSize, 1f);
+        //Movement
+        tempProperties.Add(baseMoveSpeed, 1f);
+        //Equipment
+        tempProperties.Add(grappleRange, 1f);
 
         foreach (Player player in PhotonNetwork.PlayerList) {
             player.SetCustomProperties(tempProperties);
 
         }
-
-        //PhotonNetwork.PlayerList
-
     }
 
-    public static void InitalizeTargetPlayerProperty(int id, string property, float valueMultiply) {
-        Hashtable tempProperties = new Hashtable();
+    //TODO: if player joins mid way?
+    // public static void InitalizeTargetPlayerProperty(int id, string property, float valueMultiply) {
+    //     Hashtable tempProperties = new Hashtable();
 
-        //Add all props as zero
-        tempProperties.Add(damageMod, 0);
-        tempProperties.Add(horizontalRecoilMod, 0);
-        tempProperties.Add(verticalRecoilMod, 0);
-        tempProperties.Add(fireRateMod, 0);
-
-
-        PhotonView.Find(id).Owner.SetCustomProperties(tempProperties);
+    //     //Add all props as zero
+    //     tempProperties.Add(damageMod, 0);
+    //     tempProperties.Add(horizontalRecoilMod, 0);
+    //     tempProperties.Add(verticalRecoilMod, 0);
+    //     tempProperties.Add(fireRateMod, 0);
 
 
-        //PhotonNetwork.PlayerList
+    //     PhotonView.Find(id).Owner.SetCustomProperties(tempProperties);
 
-    }
 
-    public static void ChangeTargetPlayerProperty(int id, string property, int value, bool multiply, bool add) {
+    //     //PhotonNetwork.PlayerList
+
+    // }
+
+    public static void ChangeTargetPlayerProperty(int id, string property, float value, bool multiply, bool add) {
         Hashtable tempProperties = new Hashtable();
         tempProperties = PhotonView.Find(id).Owner.CustomProperties;
 
         if (multiply) {
-            tempProperties[property] = (int)tempProperties[property] * value;
+            tempProperties[property] = (float)tempProperties[property] * value;
         } else if (add) {
-            tempProperties[property] = (int)tempProperties[property] + value;
+            tempProperties[property] = (float)tempProperties[property] + value;
         }
 
         PhotonView.Find(id).Owner.CustomProperties = tempProperties;
     }
 
-    public static int GetTargetPlayerProperty(int id, string property) {
-        return (int)PhotonView.Find(id).Owner.CustomProperties[property];
+    public static void ChangeTargetPlayerPropertyAC(int actorNumber, string property, float value, bool multiply, bool add) {
+        Hashtable tempProperties = new Hashtable();
+        tempProperties = PhotonNetwork.CurrentRoom.GetPlayer(actorNumber).CustomProperties;
+
+        if (multiply) {
+            tempProperties[property] = (float)tempProperties[property] * value;
+        } else if (add) {
+            tempProperties[property] = (float)tempProperties[property] + value;
+        }
+
+        PhotonNetwork.CurrentRoom.GetPlayer(actorNumber).CustomProperties = tempProperties;
     }
 
-    public static int GetTargetPlayerPropertyAC(int actorNumber, string property) {
-        return (int)PhotonNetwork.CurrentRoom.GetPlayer(actorNumber).CustomProperties[property];
+    public static float GetTargetPlayerProperty(int id, string property) {
+        return (float)PhotonView.Find(id).Owner.CustomProperties[property];
     }
+
+    public static float GetTargetPlayerPropertyAC(int actorNumber, string property) {
+        return (float)PhotonNetwork.CurrentRoom.GetPlayer(actorNumber).CustomProperties[property];
+    }
+
+
 }

@@ -160,7 +160,7 @@ public class ProjectileGun : Gun
         currentBullet.transform.forward = direction.normalized;
 
         //Set Bullet's local info
-        currentBullet.GetComponent<ProjectileInfo>().damage = ((GunInfo)itemInfo).damage;
+        currentBullet.GetComponent<ProjectileInfo>().damage = ((GunInfo)itemInfo).damage * PlayerPropertiesManager.GetTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.damageMod); //Use of player properties to mod damage
         currentBullet.GetComponent<ProjectileInfo>().owner = owner;
         if(PV.IsMine) //only the player shooting will have an active bullet
         {

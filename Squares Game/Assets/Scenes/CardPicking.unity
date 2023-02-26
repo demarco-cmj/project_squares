@@ -205,7 +205,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 227191751}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1117740186}
+        m_TargetAssemblyTypeName: CardManager, Assembly-CSharp
+        m_MethodName: PickCard
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &227191751
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1695,16 +1707,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentPlayerID: 0
-  cards:
-  - {fileID: 11400000, guid: 9b86822509de4564998020afa2e9d6c9, type: 2}
+  currentPlayerIndex: 0
+  allCards:
   - {fileID: 11400000, guid: 27991777ca9d97a4f84e29e192fed93c, type: 2}
+  - {fileID: 11400000, guid: 9b86822509de4564998020afa2e9d6c9, type: 2}
+  - {fileID: 11400000, guid: 4dbf3b93307dfb84caa77872294ed0db, type: 2}
   - {fileID: 11400000, guid: 8ad21a7296652524bbbc7edd9409fa8e, type: 2}
   - {fileID: 11400000, guid: ff6c5241bcebbb14d86bfd3f4594e507, type: 2}
-  - {fileID: 11400000, guid: 4dbf3b93307dfb84caa77872294ed0db, type: 2}
   cardsUI:
-  - {fileID: 543599601}
   - {fileID: 1310048216}
+  - {fileID: 543599601}
   - {fileID: 302482647}
+  playerTurnText: {fileID: 807542299}
 --- !u!1 &1133890543
 GameObject:
   m_ObjectHideFlags: 0
@@ -2055,7 +2069,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1185892089}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1117740186}
+        m_TargetAssemblyTypeName: CardManager, Assembly-CSharp
+        m_MethodName: PickCard
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1185892089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2860,7 +2886,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1906455388}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1117740186}
+        m_TargetAssemblyTypeName: CardManager, Assembly-CSharp
+        m_MethodName: PickCard
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1906455388
 MonoBehaviour:
   m_ObjectHideFlags: 0

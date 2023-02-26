@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nameText: Grapple 1
   statText: Increases grapple range by 100%
-  stats: []
+  stats:
+  - {fileID: 11400000, guid: a8b66f2943b77ff45b64f5eb51b82551, type: 2}

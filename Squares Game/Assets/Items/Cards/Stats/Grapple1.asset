@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f1f745ff4210f949a2f8279568c5143, type: 3}
-  m_Name: bigBullets
+  m_Script: {fileID: 11500000, guid: c6f8bb144a75b9d4691cd0e9649fd274, type: 3}
+  m_Name: Grapple1
   m_EditorClassIdentifier: 
-  nameText: Big bullets
-  statText: Makes bullets 100% bigger!
-  stats:
-  - {fileID: 11400000, guid: 257e82006228e47418b51906805a8297, type: 2}
+  property: GrappleRange
+  value: 2
+  multiply: 1
+  add: 0

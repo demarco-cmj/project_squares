@@ -6,7 +6,7 @@ using UnityEngine;
 public class StatChange : ScriptableObject
 {
     public string property;
-    public int value;
+    public float value;
     public bool multiply;
     public bool add;
 

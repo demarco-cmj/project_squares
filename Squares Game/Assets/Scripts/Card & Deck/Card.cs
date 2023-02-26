@@ -13,11 +13,6 @@ public class Card : ScriptableObject
     // }
 
     public string nameText, statText;
-    [SerializeField] StatChange[] stats;
+    public StatChange[] stats;
 
-
-    public void SelectCard()
-    {
-
-    }
 }

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: 2x Damage
   m_EditorClassIdentifier: 
   property: DamageMod
-  value: 2
+  value: 1.2
   multiply: 1
   add: 0

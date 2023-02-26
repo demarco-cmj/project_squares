@@ -20,6 +20,7 @@ public class ProjectileInfo : MonoBehaviour
     {
         if(collision.gameObject.tag == "Player")    //everyone is calculating damage, only the shooter activates RPC calls
         {
+            Debug.Log("Doing damange: " + damage);
             float tempHP = -100;
             if(!collision.gameObject.GetComponent<PhotonView>().IsMine)
             {

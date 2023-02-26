@@ -51,20 +51,20 @@ public class PlayerManager : MonoBehaviour
 
         //update custom properties
         PlayerPropertiesManager.ChangeTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.livesRemaining, -1, false, true);
-        PlayerPropertiesManager.ChangeTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.damageMod, 1, false, true);
 
         //Check lives remaining for if dead
         if(PlayerPropertiesManager.GetTargetPlayerProperty(PV.ViewID, PlayerPropertiesManager.livesRemaining) <= 0 ) {
             Debug.Log("YOU ARE DEAD");
+
+            if (PV.IsMine && CheckMatchOver()) {
+                CardManager.LoadCardPicking();
+            }
             
         }
 
-        if (CheckMatchOver()) {
-            Launcher.LoadCardPicking();
-        }
-
         //PV.RPC("RPC_HideBody", RpcTarget.All, controller); //TODO: Not used
-        StartCoroutine(DeleteBody(killer, body, suicide));
+        //StartCoroutine(DeleteBody(killer, body, suicide));
+        DeleteBody(killer, body, suicide);
     }
 
     void TraceKill(string killer, string body, bool suicide)
@@ -73,12 +73,12 @@ public class PlayerManager : MonoBehaviour
         PV.RPC("RPC_TraceKill", RpcTarget.All, killer, body, suicide);
     }
 
-    IEnumerator DeleteBody(string killer, string body, bool suicide)
+    void DeleteBody(string killer, string body, bool suicide)
     {
-        if(!suicide)
-        {
-            yield return new WaitForSeconds(3);
-        }
+        // if(!suicide) // needs to be IEnumerator not void
+        // {
+        //     yield return new WaitForSeconds(3);
+        // }
         PhotonNetwork.Destroy(controller);
         CreateController();
     }
